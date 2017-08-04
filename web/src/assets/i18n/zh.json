@@ -1,0 +1,23 @@
+{
+    "appName": "论道与扯犊子",
+    "addFriend": "添加好友",
+    "profile": "个人资料",
+    "settings": "设置",
+    "help": "帮助",
+    "logIn":"登录",
+    "logOut": "登出",
+    "newConversation":"新的对话",
+    "contactSearchPlaceHolder":"数字 ID/手机号/用户名/邮箱",
+    "contactSearchDialogTitle":"查找联系人",
+    "doSearch":"查找",
+    "addContact":"添加为联系人",
+    "shareContact":"推荐联系人",
+    "inviteToTeam":"邀请加入团队",
+    "more":"更多信息",
+    "username-logIn":"用户名+密码登录",
+    "mobile-logIn":"手机号+动态验证码登录",
+    "mobile":"手机号",
+    "smsCode":"短信验证码",
+    "username":"用户名",
+    "password":"密码"
+}

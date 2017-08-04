@@ -1,0 +1,32 @@
+<div fxLayout="row" fxLayoutAlign="center center" style="height: 100%;">
+    <div>
+        <md-tab-group>
+            <md-tab label="{{ 'username-logIn' | translate }}">
+                <form [formGroup]="usernameLogInForm" (ngSubmit)="logInByPassword()">
+                    <div fxLayout="column" fxLayoutAlign="start stretch">
+                        <md-input-container>
+                            <input mdInput placeholder="{{ 'username' | translate }}" type="text" formControlName="username" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <input mdInput placeholder="{{ 'password' | translate }}" type="password" formControlName="password" required>
+                        </md-input-container>
+                        <button color="primary" md-raised-button [disabled]="!usernameLogInForm.valid">{{ 'logIn' | translate }}</button>
+                    </div>
+                </form>
+            </md-tab>
+            <md-tab label="{{ 'mobile-logIn' | translate}}">
+                <form [formGroup]="mobileLogInForm" (ngSubmit)="logInBySMSCode()">
+                    <div fxLayout="column" fxLayoutAlign="start stretch">
+                        <md-input-container>
+                            <input mdInput placeholder="{{ 'mobile' | translate }}" type="text" formControlName="mobile" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <input mdInput placeholder="{{ 'smsCode' | translate }}" type="text" formControlName="smsCode" required>
+                        </md-input-container>
+                        <button color="primary" md-raised-button [disabled]="!mobileLogInForm.valid">{{ 'logIn' | translate }}</button>
+                    </div>
+                </form>
+            </md-tab>
+        </md-tab-group>
+    </div>
+</div>

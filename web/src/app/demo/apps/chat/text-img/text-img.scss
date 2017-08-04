@@ -1,0 +1,31 @@
+$text-image-size: 2.5rem !default;
+$img-border-radius: 50%;
+
+.text-img-super {
+    width: $text-image-size;
+    height: $text-image-size;
+    border-radius: $img-border-radius;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+text-img {
+    @extend .text-img-super;
+    color: white;
+}
+
+text-img.hasText::after {
+    @extend .text-img-super;
+    content: attr(value);
+}
+//$imgUrl:attr(img);
+text-img.hasImg::after{
+    //background-image:url($imgUrl);//url('../../assets/img/avatar-bill-gates.jpg');
+    display: inline-block;
+    background-size: $text-image-size;
+    width:  $text-image-size; 
+    height:  $text-image-size;
+    content: "";
+}
+

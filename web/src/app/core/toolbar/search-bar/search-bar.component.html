@@ -1,0 +1,51 @@
+<div class="search-wrapper" fxLayout="row" [ngClass]="{ 'focus': focused, 'has-input': input }" fxFlex (msClickOutside)="closeDropdown()">
+  <md-icon class="search-icon">search</md-icon>
+  <input type="search"
+         autocomplete="off"
+         spellcheck="false"
+         class="search-input"
+         [(ngModel)]="input"
+         (focus)="openDropdown()"
+         placeholder="Search...">
+
+  <div class="search-dropdown mat-elevation-z1">
+    <div class="content results" *ngIf="input" fxLayout="column">
+      <div class="heading" fxLayout="row" fxLayoutAlign="start center">
+        <md-icon class="icon">search</md-icon>
+        Search results for: {{ input }}
+      </div>
+      <div class="items">
+        <div class="item" md-ripple>Form Elements</div>
+        <div class="item" md-ripple>Form Wizard</div>
+        <div class="item" md-ripple>Profile</div>
+        <div class="item" md-ripple>Calendar</div>
+        <div class="item" md-ripple>Profile page</div>
+      </div>
+    </div>
+
+    <div class="content recents" fxLayout="row" *ngIf="!input">
+      <div class="recently" fxLayout="column" fxFlex>
+        <div class="heading" fxLayout="row" fxLayoutAlign="start center">
+          <md-icon class="icon">restore</md-icon>
+          Recently Visited
+        </div>
+        <div class="items">
+          <div class="item" md-ripple *ngFor="let item of recentlyVisited" [routerLink]="item.route" (click)="closeDropdown()">{{ item.name }}</div>
+        </div>
+      </div>
+      <div class="frequently" fxLayout="column" fxFlex fxFlexOffset="16px">
+        <div class="heading" fxLayout="row" fxLayoutAlign="start center">
+          <md-icon class="icon">youtube_searched_for</md-icon>
+          Frequently Visited
+        </div>
+        <div class="items">
+          <div class="item" md-ripple [routerLink]="['/forms/form-elements']">Form Elements</div>
+          <div class="item" md-ripple [routerLink]="['/forms/form-wizard']">Form Wizard</div>
+          <div class="item" md-ripple [routerLink]="['/editor']">WYSIWYG Editor</div>
+          <div class="item" md-ripple [routerLink]="['/maps/google-maps']">Google Maps</div>
+          <div class="item" md-ripple [routerLink]="['/components/dialogs']">Material Dialog</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
