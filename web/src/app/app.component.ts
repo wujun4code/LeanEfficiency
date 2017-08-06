@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MediaReplayService } from "./core/sidenav/mediareplay/media-replay.service";
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',

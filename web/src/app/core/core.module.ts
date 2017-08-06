@@ -21,6 +21,35 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 
+import { HttpModule, Http } from '@angular/http';
+import { TranslateModule, TranslateLoader, TranslatePipe } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// The translate loader needs to know where to load i18n files
+// in Ionic's static asset pipeline.
+export function HttpLoaderFactory(http: Http) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+export function createTranslateLoader(http: Http) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+export const coreCoponents = [
+  SidenavComponent,
+  SidenavItemComponent,
+  IconSidenavDirective,
+  SearchComponent,
+  BreadcrumbsComponent,
+  AdminComponent,
+  QuickpanelComponent,
+  ToolbarComponent,
+  ToolbarUserButtonComponent,
+  ClickOutsideDirective,
+  SearchBarComponent,
+  ToolbarNotificationsComponent
+];
+
 @NgModule({
   imports: [
     CommonModule,
@@ -28,22 +57,18 @@ import { FormsModule } from '@angular/forms';
     MaterialComponentsModule,
     FlexLayoutModule,
     FormsModule,
-    PerfectScrollbarModule.forChild()
+    PerfectScrollbarModule.forChild(),
+    HttpModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [Http]
+      }
+    }),
   ],
-  declarations: [
-    SidenavComponent,
-    SidenavItemComponent,
-    IconSidenavDirective,
-    SearchComponent,
-    BreadcrumbsComponent,
-    AdminComponent,
-    QuickpanelComponent,
-    ToolbarComponent,
-    ToolbarUserButtonComponent,
-    ClickOutsideDirective,
-    SearchBarComponent,
-    ToolbarNotificationsComponent
-  ],
+  declarations: coreCoponents,
+  exports: coreCoponents,
   providers: [
     SidenavService,
     MediaReplayService,
