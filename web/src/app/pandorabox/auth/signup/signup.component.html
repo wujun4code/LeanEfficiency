@@ -1,0 +1,75 @@
+<div fxLayout="row" fxLayoutAlign="center center" style="height: 100%;">
+  <md-card fxFlex="60%">
+    <md-toolbar color="primary">{{ 'signup-guide' | translate }}</md-toolbar>
+    <md-card-content>
+      <md-tab-group [selectedIndex]="selectedIndex">
+
+        <md-tab label="{{ 'signup-basic-group' | translate }}" disabled="true">
+          <form [formGroup]="userForm">
+            <div fxLayout="column">
+              <md-input-container>
+                <input mdInput placeholder="{{ 'username-option' | translate}}" type="text" required formControlName="username">
+              </md-input-container>
+              <md-input-container>
+                <input mdInput placeholder="{{ 'email-optional' | translate}}" type="email" formControlName="email">
+              </md-input-container>
+
+              <div fxLayout="column" fxLayout.gt-sm="row">
+                <md-input-container fxFlex>
+                  <input mdInput placeholder="{{ 'password' | translate}}" type="password" formControlName="password">
+                </md-input-container>
+                <md-input-container fxFlex>
+                  <input mdInput placeholder="{{ 'password-confirm' | translate}}" type="password" formControlName="passwordConfirm">
+                </md-input-container>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="end center">
+                <button md-button type="button" disabled>{{ 'btnPrevious' | translate}}</button>
+                <button color="primary" md-raised-button (click)="btnNextToTeamSelect()" type="button" [disabled]="!canGoToTeamSelect">{{ 'btnNext' | translate}}</button>
+              </div>
+            </div>
+          </form>
+        </md-tab>
+
+        <md-tab label="{{ 'signup-team-group' | translate }}" disabled="true">
+          <form [formGroup]="teamForm">
+            <div fxLayout="column">
+              <div fxLayout="column" fxLayout.gt-sm="row">
+                <md-select placeholder="{{ 'user-payment-type' | translate }}" formControlName="paymentType">
+                  <md-option *ngFor="let fbPayment of paymentTypes" [value]="fbPayment">{{ fbPayment.name }}</md-option>
+                </md-select>
+              </div>
+
+              <div fxLayout="column" fxLayout.gt-sm="row">
+                <md-input-container fxFlex>
+                  <input mdInput placeholder="{{ 'team-name' | translate }}" formControlName="name">
+                </md-input-container>
+              </div>
+
+              <div fxLayout="column" fxLayout.gt-sm="row">
+                <md-input-container fxFlex>
+                  <input mdInput placeholder="{{ 'team-domain' | translate }}" formControlName="domain">
+                </md-input-container>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="end center">
+                <button md-button type="button" (click)="previousStep()">{{ 'btnPrevious' | translate}}</button>
+                <button color="primary" md-raised-button (click)="btnNextToComplete()" type="button">{{ 'btnNext' | translate}}</button>
+              </div>
+            </div>
+          </form>
+        </md-tab>
+
+        <md-tab label="{{ 'signup-complete'| translate }}" disabled="true">
+          <div fxLayout="column">
+            <h1>{{ 'signup-congratulations' | translate }}</h1>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="end center">
+            <button md-button type="button" (click)="previousStep()">{{ 'btnPrevious' | translate}}</button>
+          </div>
+        </md-tab>
+
+      </md-tab-group>
+    </md-card-content>
+  </md-card>
+</div>

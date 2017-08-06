@@ -59,7 +59,7 @@ export class LogInComponent implements OnInit {
     }
 
     afterLogIn(user: RxAVUser) {
-        //this.router.navigate(['/pandorabox/apps/chat']);
+        this.router.navigate(['/pandorabox/dashboard']);
         console.log(user.username + 'loggedIn');
     }
 

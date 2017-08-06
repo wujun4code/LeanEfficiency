@@ -29,6 +29,13 @@ import { CalendarComponent } from "./demo/apps/calendar/calendar.component";
 import { ChatComponent } from "./demo/apps/chat/chat.component";
 import { AutocompleteComponent } from "./demo/components/autocomplete/autocomplete.component";
 
+const fixedRoutes: Routes = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  }
+];
 const routes: Routes = [
   {
     path: 'login',
@@ -152,7 +159,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(fixedRoutes)],
   exports: [RouterModule],
   providers: []
 })

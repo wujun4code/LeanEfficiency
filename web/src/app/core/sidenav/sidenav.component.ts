@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { Router, NavigationEnd } from "@angular/router";
 import { Subscription } from "rxjs";
 import { BreadcrumbService } from "../breadcrumb/breadcrumb.service";
-import {MdSnackBar, MdSnackBarConfig} from "@angular/material";
+import { MdSnackBar, MdSnackBarConfig } from "@angular/material";
 
 @Component({
   selector: 'ms-sidenav',
@@ -106,8 +106,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
     array.forEach(function (item) {
       let keys = _.keys(item);
-      keys.forEach(function(key){
-        if(_.isArray(item[key])){
+      keys.forEach(function (key) {
+        if (_.isArray(item[key])) {
           item[key] = that.sortRecursive(item[key], propertyName);
         }
       });
