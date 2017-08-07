@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
 import { DefaultSignUpService } from './signup.service';
 import { FormBuilder, FormGroup, FormControl, FormControlName, FormArray, FormArrayName, Validators, ValidatorFn } from '@angular/forms';
 import { DefaultTeamService } from '../../team';
@@ -40,7 +41,12 @@ export class SignUpComponent implements OnInit {
     return pwd == cpwd;
   }
 
+  get canGoToComplete() {
+    return this.teamForm.valid;
+  }
+
   constructor(public sinupService: DefaultSignUpService,
+    private router: Router,
     public teamService: DefaultTeamService,
     public formBuilder: FormBuilder, ) {
     this.userForm = this.formBuilder.group({
@@ -53,7 +59,7 @@ export class SignUpComponent implements OnInit {
     this.teamForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
       domain: new FormControl('', [Validators.required]),
-      paymentType: new FormControl(''),
+      paymentType: new FormControl('', [Validators.required]),
     });
 
     this.userForm.valueChanges.subscribe(value => {
@@ -116,6 +122,10 @@ export class SignUpComponent implements OnInit {
 
   previousStep() {
     this.selectedIndex -= 1;
+  }
+
+  goHome() {
+    this.router.navigate(['/pandorabox/dashboard']);
   }
 
 }
