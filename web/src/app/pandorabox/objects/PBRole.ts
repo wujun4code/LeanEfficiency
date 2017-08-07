@@ -8,6 +8,10 @@ export class PBRole {
     constructor(_metaRole: RxAVRole) {
         this.metaRole = _metaRole;
     }
+
+    grant(user: PBUser) {
+        return this.metaRole.grant(user.metaUser);
+    }
 }
 
 export class PBBoss extends PBRole {

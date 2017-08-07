@@ -1,4 +1,5 @@
 import { PBObject } from './PBObject';
+import { Observable } from 'rxjs';
 import { PBRole } from './PBRole';
 import { PBUser } from './PBUser';
 import { PBTeamUserFields } from './PBTeamUser';
@@ -74,7 +75,10 @@ export class PBTeam extends PBObject {
 
         team_user_relation_obj.ACL = this.teamACL;
 
-        return team_user_relation_obj.save();
+        return team_user_relation_obj.save().flatMap(added => {
+            let grant = roles.map(r => r.grant(user));
+            return Observable.merge(...grant);
+        });
     }
 
     assign(user: PBUser, role: PBRole) {
@@ -87,7 +91,9 @@ export class PBTeam extends PBObject {
             if (list.length > 0) {
                 let team_user_relation_obj = list[0];
                 team_user_relation_obj.addUnique(PBTeamUserFields.roles, user.metaUser);
-                return team_user_relation_obj.save();
+                return team_user_relation_obj.save().flatMap(added => {
+                    return role.grant(user);
+                });
             }
             return this.addMember(user, [role]);
         });

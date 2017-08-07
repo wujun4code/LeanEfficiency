@@ -54,7 +54,7 @@
 
               <div fxLayout="row" fxLayoutAlign="end center">
                 <button md-button type="button" (click)="previousStep()">{{ 'btnPrevious' | translate}}</button>
-                <button color="primary" md-raised-button (click)="btnNextToComplete()" type="button">{{ 'btnNext' | translate}}</button>
+                <button color="primary" md-raised-button (click)="btnNextToComplete()" type="button" [disabled]="!canGoToComplete">{{ 'btnNext' | translate}}</button>
               </div>
             </div>
           </form>
@@ -65,7 +65,7 @@
             <h1>{{ 'signup-congratulations' | translate }}</h1>
           </div>
           <div fxLayout="row" fxLayoutAlign="end center">
-            <button md-button type="button" (click)="previousStep()">{{ 'btnPrevious' | translate}}</button>
+            <button md-button type="button" (click)="goHome()">{{ 'btnEntrance' | translate}}</button>
           </div>
         </md-tab>
 
