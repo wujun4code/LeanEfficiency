@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {D3ChartService, D3} from "../../charts/nvD3/nvD3.service";
+import { Component, OnInit, Input } from '@angular/core';
+import { D3ChartService, D3 } from "../../charts/nvD3/nvD3.service";
 
 @Component({
   selector: 'ms-traffic-sources',
@@ -29,7 +29,7 @@ export class TrafficSourcesComponent implements OnInit {
       chart: {
         type: 'lineChart',
         height: 50,
-        margin : {
+        margin: {
           top: 0,
           right: 0,
           bottom: 0,

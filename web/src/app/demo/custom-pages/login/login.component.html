@@ -18,6 +18,7 @@
           <md-checkbox class="remember-me">Remember Me</md-checkbox>
           <a class="forgot-password" [routerLink]="['/forgot-password']">Forgot Password?</a>
         </div>
+        
         <button color="primary" md-raised-button [disabled]="!form.valid">SIGN IN</button>
         <p class="note">Don't have an account?<br/> <a [routerLink]="['/register']">Click here to create one</a></p>
       </div>

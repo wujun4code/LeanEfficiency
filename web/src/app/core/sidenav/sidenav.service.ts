@@ -27,7 +27,8 @@ export class SidenavService {
     let pbDashboard = menu.addItem('dashboard', 'dashboard', '/pandorabox/dashboard', 1);
     let pbRoom = menu.addItem('room', 'home', '/pandorabox/room', 2);
     let pbTicket = menu.addItem('ticket', 'assignment', '/pandorabox/ticket', 3);
-    let pbSystem = menu.addItem('logOut', 'power_settings_new', '/pandorabox/logout', 4);
+    let pbMember = menu.addItem('staff', 'person', '/pandorabox/staff', 4);
+    //let pbSystem = menu.addItem('logOut', 'power_settings_new', '/pandorabox/logout', 4);
     //let dashboard = menu.addItem('Dashboard', 'dashboard', '/', 3);
 
     // menu.addItem('Inbox', 'mail', '/apps/inbox', 1, '22', '#7986CC');

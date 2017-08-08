@@ -10,6 +10,8 @@ export class LogOutComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    
   }
 
+  
 }

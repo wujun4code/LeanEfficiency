@@ -13,7 +13,7 @@
   </md-sidenav>
 
   <div class="content-container" fxLayout="column">
-     <!-- <ms-toolbar [quickpanel]="quickpanel" [sidenav]="sidenav"></ms-toolbar> -->
+      <ms-toolbar [quickpanel]="quickpanel" [sidenav]="sidenav" [userPanel]="userPanel"></ms-toolbar> 
 
     <div class="main-container" #scrollContainer>
       <router-outlet (activate)="onActivate($event, scrollContainer)"></router-outlet>

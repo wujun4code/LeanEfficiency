@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ToolBarUserModel, ActionModel } from '../models/user';
 
 @Component({
   selector: 'ms-toolbar-user-button',
@@ -8,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class ToolbarUserButtonComponent implements OnInit {
 
   isOpen: boolean;
+
+  @Input('userPanel') userPanel: ToolBarUserModel;
 
   constructor() { }
 

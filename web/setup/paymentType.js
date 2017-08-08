@@ -3,6 +3,7 @@ var RxAVObject = rxLeanCloud.RxAVObject;
 var RxAVACL = rxLeanCloud.RxAVACL;
 
 require('./appConfig');
+
 var saRoleName = 'sa';
 
 const paymentTypes =
@@ -32,8 +33,7 @@ const paymentTypes =
         cashier: 5,
         reception: 15,
         technician: 180
-    }
-    ];
+    }];
 
 const PBPaymentTypeFields = {
     className: 'PBPaymentType',

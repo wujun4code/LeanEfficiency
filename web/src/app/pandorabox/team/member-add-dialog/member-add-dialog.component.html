@@ -1,0 +1,54 @@
+<h1>{{ 'add-member-dialog-title' | translate }}</h1>
+
+
+<div fxLayout="column">
+  <div fxLayout="column" fxLayout.gt-md="row">
+    <md-input-container fxFlex>
+      <input mdInput placeholder="First Name">
+    </md-input-container>
+    <md-input-container fxFlex>
+      <input mdInput placeholder="Last Name">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout.gt-md="row">
+    <md-input-container fxFlex dividerColor="accent">
+      <input mdInput placeholder="Pre-filled Input + Accent color" value="Material Design">
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout.gt-md="row">
+    <md-input-container fxFlex>
+      <input mdInput placeholder="Address">
+      <span md-prefix><md-icon>place</md-icon></span>
+    </md-input-container>
+    <md-input-container fxFlex>
+      <input mdInput placeholder="City">
+      <span md-prefix><md-icon>location_city</md-icon></span>
+    </md-input-container>
+    <md-input-container fxFlex>
+      <input mdInput placeholder="Country">
+      <span md-suffix><md-icon>local_airport</md-icon></span>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout.gt-md="row">
+    <md-input-container fxFlex>
+      <input mdInput placeholder="Character count (max. 100)" maxlength="100" #characterCountHintExample value="Hello! How are you today?">
+      <md-hint align="end">{{ characterCountHintExample.value.length }} / 100</md-hint>
+    </md-input-container>
+  </div>
+  <div fxLayout="column" fxLayout.gt-md="row">
+    <md-input-container fxFlex>
+      <input mdInput placeholder="Primary Color">
+    </md-input-container>
+    <md-input-container dividerColor="accent" fxFlex>
+      <input mdInput placeholder="Accent Color">
+    </md-input-container>
+    <md-input-container dividerColor="warn" fxFlex>
+      <input mdInput placeholder="Warn Color">
+    </md-input-container>
+  </div>
+</div>
+
+<md-dialog-actions align="end">
+  <button md-button (click)="dialogRef.close('No!')">{{ 'btnCancel' | translate }}</button>
+  <button md-button color="warn" (click)="logout()">{{ 'btnConfirm' | translate }}</button>
+</md-dialog-actions>

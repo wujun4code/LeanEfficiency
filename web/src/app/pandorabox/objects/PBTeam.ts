@@ -34,6 +34,10 @@ export class PBTeam extends PBObject {
         return this.metaData.get(PBTeamFields.location) || '';
     }
 
+    get bossRoleName() {
+        return `${this.domain}_boss`;
+    }
+
     get teamACL() {
         let teamACL = new RxAVACL();
         teamACL.setPublicReadAccess(false);

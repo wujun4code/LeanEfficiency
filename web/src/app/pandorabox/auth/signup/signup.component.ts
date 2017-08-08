@@ -63,11 +63,9 @@ export class SignUpComponent implements OnInit {
     });
 
     this.userForm.valueChanges.subscribe(value => {
-      console.log(value);
     });
 
     this.teamForm.valueChanges.subscribe(value => {
-      console.log(value);
     });
 
   }
@@ -90,7 +88,7 @@ export class SignUpComponent implements OnInit {
   btnNextToTeamSelect() {
     let username = this.userForm.value.username;
     let password = this.userForm.value.password;
-    this.sinupService.createUser({
+    this.sinupService.signUpUser({
       username: username,
       password: password
     }).subscribe(pbUser => {
@@ -106,10 +104,14 @@ export class SignUpComponent implements OnInit {
     let team: PBTeam = null;
     this.teamService.createTeam(name, domain, paymentType).flatMap(pbTeam => {
       team = pbTeam;
-      return this.teamService.createBossRole(this.pbUser, team);
+      let bossRoleOble = this.teamService.createBossRole(this.pbUser, team);
+      return Observable.merge(bossRoleOble);
     }).flatMap(pbRole => {
       return team.assign(this.pbUser, pbRole);
       //return Observable.from([0]);
+    }).flatMap(bossRoleAssigned => {
+      let roleOble = this.teamService.createRole(team);
+      return roleOble;
     }).subscribe(completed => {
       console.log('team,role,user completed.');
       this.nextStep();
