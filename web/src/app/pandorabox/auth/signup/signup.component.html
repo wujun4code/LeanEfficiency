@@ -68,8 +68,10 @@
             <button md-button type="button" (click)="goHome()">{{ 'btnEntrance' | translate}}</button>
           </div>
         </md-tab>
-
       </md-tab-group>
+      <div>
+        <p class="note">{{ 'had-an-account' | translate }}<a [routerLink]="['/login']">{{ 'click-me-login' | translate }}</a></p>
+      </div>
     </md-card-content>
   </md-card>
 </div>

@@ -6,16 +6,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MdIconRegistry, } from "@angular/material";
+import { MdIconRegistry } from "@angular/material";
 import { CoreModule } from '../core/core.module';
 import { PandoraBoxRoutingModule } from './pandorabox-routing.module';
 // components
+// root
 import { PandoraBoxComponent } from './pandorabox.component'
+// template
+import { PbEditTemplateComponent } from './common/pb-edit-template/pb-edit-template.component';
 // auth
 import { SignUpComponent } from './auth/signup/signup.component';
 import { LogInComponent } from './auth/login/login.component';
 import { LogOutComponent } from './auth/logout/logout.component';
-import { LayoutComponent } from './layout/layout.component';
+import { LayoutComponent, DemoDialog } from './layout/layout.component';
 
 // dashboard
 import { DashboardMasterComponent } from './dashboard/dashboard-master/dashboard-master.component';
@@ -30,10 +33,17 @@ import { RoomMasterComponent } from './room/room-master/room-master.component';
 import { TicketAddQuickPanelComponent } from './ticket/ticket-add-quick-panel/ticket-add-quick-panel.component';
 import { TicketMasterComponent } from './ticket/ticket-master/ticket-master.component';
 
+// member
+import { MemberMasterComponent } from './team/member-master/member-master.component';
+import { MemberAddDialogComponent } from './team/member-add-dialog/member-add-dialog.component';
+import { MemberEditDialogComponent } from './team/member-edit-dialog/member-edit-dialog.component';
+
 export const components = [
     PandoraBoxComponent,
+    PbEditTemplateComponent,
     SignUpComponent,
     LayoutComponent,
+    DemoDialog,
     LogInComponent,
     LogOutComponent,
     DashboardMasterComponent,
@@ -41,6 +51,9 @@ export const components = [
     RoomMasterComponent,
     TicketMasterComponent,
     TicketAddQuickPanelComponent,
+    MemberMasterComponent,
+    MemberAddDialogComponent,
+    MemberEditDialogComponent,
 ];
 
 // services
@@ -56,6 +69,7 @@ import { services } from './services';
         // route
         PandoraBoxRoutingModule,
     ],
+    entryComponents: components,
     providers: [
         MdIconRegistry,
         services

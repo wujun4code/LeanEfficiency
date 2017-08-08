@@ -14,6 +14,12 @@ export class PBRole {
     }
 }
 
+export class PBStaff extends PBRole {
+    constructor(staffRole: RxAVRole) {
+        super(staffRole);
+    }
+}
+
 export class PBBoss extends PBRole {
     constructor(bossRole: RxAVRole) {
         super(bossRole);

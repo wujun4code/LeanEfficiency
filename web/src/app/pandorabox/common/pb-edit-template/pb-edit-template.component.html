@@ -1,0 +1,8 @@
+
+<div fxLayout="column">
+  <div fxLayout="column" fxLayout.gt-md="row" *ngFor="let field of pbConfig.fields">
+    <md-input-container fxFlex>
+      <input mdInput placeholder="{{ field.placeholder | translate}}" [(ngModel)]="field.value" >
+    </md-input-container>
+  </div>
+</div>

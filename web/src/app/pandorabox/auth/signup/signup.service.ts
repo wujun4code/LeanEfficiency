@@ -3,6 +3,7 @@ import { RxAVUser } from 'rx-lean-js-core';
 import { Observable } from 'rxjs';
 import { PBUser } from '../../objects';
 import { StringUtils } from '../../services/stringUtils';
+import { DefaultAuthService } from '../auth.service';
 
 export interface ISignUpService {
     createUser(options: any): Observable<PBUser>;
@@ -10,7 +11,8 @@ export interface ISignUpService {
 
 @Injectable()
 export class DefaultSignUpService implements ISignUpService {
-    constructor(public stringUtils: StringUtils) {
+    constructor(public stringUtils: StringUtils,
+        public authService: DefaultAuthService) {
 
     }
 
@@ -34,11 +36,7 @@ export class DefaultSignUpService implements ISignUpService {
     }
 
     currentUser(options?: any) {
-        return RxAVUser.current(options).map(user => {
-            if (user != undefined && user != null)
-                return new PBUser(user);
-            return undefined;
-        });
+        return this.authService.currentUser();
     }
 
     signUpUser(options: any): Observable<PBUser> {

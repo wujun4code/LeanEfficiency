@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="center center" style="height: 100%;">
-    <div>
+    <div fxLayout="column" fxLayoutAlign="start stretch">
         <md-tab-group>
             <md-tab label="{{ 'username-logIn' | translate }}">
                 <form [formGroup]="usernameLogInForm" (ngSubmit)="logInByPassword()">
@@ -28,5 +28,9 @@
                 </form>
             </md-tab>
         </md-tab-group>
+        <div>
+            <p class="note">{{ 'dont-have-account' | translate }}<a [routerLink]="['/signup']">{{ 'click-me-create-account' | translate }}</a></p>
+        </div>
     </div>
+
 </div>

@@ -7,6 +7,10 @@ export class PBUser {
         this.metaUser = user;
     }
 
+    get nameText() {
+        return this.metaUser.username;
+    }
+
     get acl() {
         let acl_obj = new RxAVACL();
         acl_obj.setPublicReadAccess(false);
@@ -16,3 +20,7 @@ export class PBUser {
         return acl_obj;
     }
 }
+
+export const PBUserFields = {
+    name: 'name',
+};

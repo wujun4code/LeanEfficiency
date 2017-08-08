@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // components
+import { PbEditTemplateComponent } from './common/pb-edit-template/pb-edit-template.component';
+
+// auth & layout
 import { SignUpComponent } from './auth/signup/signup.component';
 import { LogInComponent } from './auth/login/login.component';
 import { LogOutComponent } from './auth/logout/logout.component';
@@ -20,6 +23,11 @@ import { TicketMasterComponent } from './ticket/ticket-master/ticket-master.comp
 
 // room
 import { RoomMasterComponent } from './room/room-master/room-master.component';
+
+// member
+import { MemberMasterComponent } from './team/member-master/member-master.component';
+import { MemberAddDialogComponent } from './team/member-add-dialog/member-add-dialog.component';
+import { MemberEditDialogComponent } from './team/member-edit-dialog/member-edit-dialog.component';
 
 const routes: Routes = [
     {
@@ -58,6 +66,9 @@ const routes: Routes = [
             {
                 path: 'ticket',
                 component: TicketMasterComponent
+            }, {
+                path: 'staff',
+                component: MemberMasterComponent
             }
         ]
     }

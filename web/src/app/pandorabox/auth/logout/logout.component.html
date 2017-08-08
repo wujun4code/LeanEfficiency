@@ -1,3 +1,6 @@
-<p>
-  logout works!
-</p>
+  <h1>{{ 'logout-dialog-title' | translate }}</h1>
+
+  <md-dialog-actions align="end">
+    <button md-button (click)="dialogRef.close('No!')">{{ 'btnCancel' | translate }}</button>
+    <button md-button color="warn" (click)="dialogRef.close('Yes!')">{{ 'btnConfirm' | translate }}</button>
+  </md-dialog-actions>

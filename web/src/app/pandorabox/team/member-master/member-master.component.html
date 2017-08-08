@@ -1,3 +1,66 @@
-<p>
-  member-master works!
-</p>
+<div fxLayout="column" fxLayout.gt-md="row" class="work-panel">
+  <md-card fxFlex.gt-md="20" class="work-panel">
+    <md-card-title>{{ 'team-member-work-panel' | translate }}</md-card-title>
+    <md-card-content fxLayout="column" fxLayoutGap="2rem">
+      <!-- <div fxLayout="row" fxLayout.gt-md="row">
+        <button md-raised-button fxFlex color="primary" (click)="openDialog('t')"><md-icon>add</md-icon>{{ 'btnAddTechnician' | translate }} </button>
+      </div>
+      <div fxLayout="row" fxLayout.gt-md="row">
+        <button md-raised-button fxFlex color="accent"><md-icon>add</md-icon>{{ 'btnAddReception' | translate }} </button>
+      </div> -->
+      <div fxLayout="column" fxLayout.gt-md="row">
+        <button md-raised-button fxFlex color="primary" [mdMenuTriggerFor]="menu"><md-icon>person_add</md-icon>{{ 'btnAddMember' | translate }}</button>
+        <md-menu #menu="mdMenu">
+          <button md-menu-item *ngFor="let menu of addMemberButtonMenus" (click)="openDialog(menu.data)">
+            <md-icon> {{ menu.icon }} </md-icon>
+            <span> {{ menu.text | translate }} </span>
+          </button>
+        </md-menu>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card fxFlex.gt-md="80" class="work-panel">
+    <md-card-title> {{ 'team-member-list' | translate }}</md-card-title>
+    <md-card-content fxLayout="column">
+      <div>
+        <md-table #table [dataSource]="dataSource">
+
+          <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- ID Column -->
+          <ng-container cdkColumnDef="userId">
+            <md-header-cell *cdkHeaderCellDef> ID </md-header-cell>
+            <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
+          </ng-container>
+
+          <!-- Progress Column -->
+          <ng-container cdkColumnDef="progress">
+            <md-header-cell *cdkHeaderCellDef> Progress </md-header-cell>
+            <md-cell *cdkCellDef="let row"> {{row.progress}}% </md-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container cdkColumnDef="userName">
+            <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+            <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
+          </ng-container>
+
+          <!-- Color Column -->
+          <ng-container cdkColumnDef="color">
+            <md-header-cell *cdkHeaderCellDef> Color </md-header-cell>
+            <md-cell *cdkCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>
+          </ng-container>
+
+          <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+          <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+        </md-table>
+
+        <md-paginator #paginator [length]="exampleDatabase.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]">
+        </md-paginator>
+      </div>
+    </md-card-content>
+  </md-card>
+
+</div>

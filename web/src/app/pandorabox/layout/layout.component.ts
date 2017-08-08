@@ -6,7 +6,13 @@ import { Subscription } from "rxjs";
 import { MediaChange } from "@angular/flex-layout";
 import { Router, NavigationEnd } from "@angular/router";
 import { MediaReplayService } from "../../core/sidenav/mediareplay/media-replay.service";
+import { MdDialogRef, MdDialog } from "@angular/material";
 
+
+// user panle model
+import { ToolBarUserModel, ActionModel } from '../../core/toolbar/models/user';
+import { DefaultSignUpService } from '../auth/signup/signup.service';
+import { DefaultAuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'pb-layout',
@@ -26,10 +32,28 @@ export class LayoutComponent implements OnInit, OnDestroy {
   sidenavMode: string = 'side';
   isMobile: boolean = false;
 
-  constructor(
-    private router: Router,
-    private mediaReplayService: MediaReplayService
-  ) { }
+  userPanel: ToolBarUserModel;
+
+  constructor(private router: Router,
+    public dialog: MdDialog,
+    public userService: DefaultSignUpService,
+    private mediaReplayService: MediaReplayService) {
+
+    this.userService.currentUser().subscribe(pbUser => {
+      this.userPanel = new ToolBarUserModel();
+      this.userPanel.id = pbUser.metaUser.objectId;
+      this.userPanel.nameText = pbUser.nameText;
+      this.userPanel.actions = [];
+      let logoutAction = new ActionModel();
+      logoutAction.actionText = 'logOut';
+      logoutAction.icon = 'exit_to_app';
+      logoutAction.action = () => {
+        this.openDialog();
+      };
+
+      this.userPanel.actions.push(logoutAction);
+    });
+  }
 
   ngOnInit() {
     this._mediaSubscription = this.mediaReplayService.media$.subscribe((change: MediaChange) => {
@@ -54,5 +78,45 @@ export class LayoutComponent implements OnInit, OnDestroy {
   onActivate(e, scrollContainer) {
     scrollContainer.scrollTop = 0;
   }
+  dialogRef: MdDialogRef<DemoDialog>;
+  result: string;
+
+  openDialog() {
+    this.dialogRef = this.dialog.open(DemoDialog, {
+      disableClose: false
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      this.result = result;
+      this.dialogRef = null;
+    });
+  }
 
 }
+
+@Component({
+  selector: 'pb-logout-dialog',
+  template: `
+  <h1>{{ 'logout-dialog-title' | translate }}</h1>
+
+  <md-dialog-actions align="end">
+    <button md-button (click)="dialogRef.close('No!')">{{ 'btnCancel' | translate }}</button>
+    <button md-button color="warn" (click)="logout()">{{ 'btnConfirm' | translate }}</button>
+  </md-dialog-actions>
+  `
+})
+export class DemoDialog {
+  constructor(public dialogRef: MdDialogRef<DemoDialog>,
+    private router: Router,
+    public authService: DefaultAuthService) {
+
+  }
+
+  logout() {
+    this.authService.logout().subscribe(logedOut => {
+      this.dialogRef.close('Yes');
+      this.router.navigate(['/login']);
+    });
+  }
+}
+

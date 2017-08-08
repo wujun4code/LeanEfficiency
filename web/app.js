@@ -5,7 +5,8 @@ var AV = require('leanengine');
 
 var app = express();
 app.use(AV.express());
-
+app.enable('trust proxy');
+app.use(AV.Cloud.HttpsRedirect());
 app.use(express.static('dist'));
 
 // for system.js to work. Can be removed if bundling.

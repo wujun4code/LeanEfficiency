@@ -1,0 +1,19 @@
+<h1>{{ title | translate }}</h1>
+
+<md-tab-group>
+  <md-tab label="{{ 'basic-info' | translate }}">
+    <pb-edit-template *ngIf="ready" [pbConfig]="editConfig"></pb-edit-template>
+  </md-tab>
+  <md-tab *ngIf="showTagTab" label="{{ 'tag' | translate }}">
+    <md-list>
+      <md-list-item *ngFor="let tag of tags">
+        <md-checkbox>{{ tag.name }}</md-checkbox>
+      </md-list-item>
+    </md-list>
+  </md-tab>
+</md-tab-group>
+
+<md-dialog-actions align="end">
+  <button md-button (click)="cancel()">{{ 'btnCancel' | translate }}</button>
+  <button md-button color="primary" (click)="done()">{{ 'btnConfirm' | translate }}</button>
+</md-dialog-actions>

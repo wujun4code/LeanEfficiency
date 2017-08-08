@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RxAVUser, RxAVQuery, RxAVObject, RxAVRole, RxAVACL } from 'rx-lean-js-core';
 import { Observable } from 'rxjs';
-import { PBTeam, PBTeamFields, PBPaymentTypeFields, PBPaymentType, PBUser, PBRole, PBBoss } from '../objects';
+import { PBTeam, PBTeamFields, PBPaymentTypeFields, PBPaymentType, PBUser, PBRole, PBBoss, PBStaff, PBMemberBuiltInProperties } from '../objects';
 
 @Injectable()
 export class DefaultTeamService {
@@ -15,7 +15,7 @@ export class DefaultTeamService {
     }
 
     createTeam(name: string, domain: string, paymentType: PBPaymentType) {
-        
+
         let team_obj = new RxAVObject(PBTeamFields.className);
         team_obj.set(PBTeamFields.name, name);
         team_obj.set(PBTeamFields.domain, domain);
@@ -26,10 +26,9 @@ export class DefaultTeamService {
     }
 
     createBossRole(boss: PBUser, team: PBTeam) {
-        let team_boss_name = `${team.domain}_boss`;
         let team_boss_role = new RxAVRole();
 
-        team_boss_role.name = team_boss_name;
+        team_boss_role.name = team.bossRoleName;
         team_boss_role.ACL = boss.acl;
 
         return team_boss_role.save().map(created => {
@@ -38,22 +37,39 @@ export class DefaultTeamService {
     }
 
     createRole(team: PBTeam) {
-        let roleName = team.name;
+        let roleName = team.domain;
         let role = new RxAVRole();
         role.name = roleName;
 
         let roleACL = new RxAVACL();
         roleACL.setPublicWriteAccess(false);
         roleACL.setRoleWriteAccess('sa', true);
+        roleACL.setRoleWriteAccess(team.bossRoleName, true);
 
         role.ACL = roleACL;
         return role.save().map(created => {
-            return role;
+            return new PBStaff(role);
         });
     }
 
-    addMember(user: PBUser, role: PBRole) {
+    getMemberFields(subCategory?: string, team?: PBTeam) {
+        let sc = subCategory ? `member-${subCategory}` : 'member';
+        let builtInRoleQuery = new RxAVQuery(PBMemberBuiltInProperties.className);
+        builtInRoleQuery.equalTo(PBMemberBuiltInProperties.subCategory, sc);
 
+        let builtInMemberQuery = new RxAVQuery(PBMemberBuiltInProperties.className);
+        builtInMemberQuery.equalTo(PBMemberBuiltInProperties.subCategory, 'member');
+
+        let commonQuery = RxAVQuery.or(builtInRoleQuery, builtInMemberQuery);
+
+        if (team) {
+            let inTeamQuery = new RxAVQuery(PBMemberBuiltInProperties.className);
+            inTeamQuery.equalTo(PBMemberBuiltInProperties.team, team.metaData);
+            let combineQuery = RxAVQuery.or(commonQuery, inTeamQuery);
+            return combineQuery.find();
+        }
+
+        return commonQuery.find();
     }
 
 
