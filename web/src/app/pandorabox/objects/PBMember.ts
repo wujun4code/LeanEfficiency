@@ -14,16 +14,20 @@ export class PBMember extends PBObject {
 export const PBMemberBuiltInProperties = {
     className: 'PBProperty',
     objectName: 'objectName',
+    id: 'objectId',
     propertyName: 'propertyName',
     description: 'description',
     propertyType: 'propertyType',
     placeholder: 'placeholder',
     category: 'category',
     subCategory: 'subCategory',
+    icon: 'icon',
     scope: 'scope',
     team: 'team',
     valid: 'valid'
 };
+
+export const PBMemberBuiltInFreezeProperties = ['serial', 'id', 'objectId'];
 
 export const PBMemberKeys = {
     technician: 'technician',

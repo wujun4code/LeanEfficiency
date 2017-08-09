@@ -1,0 +1,24 @@
+.block1 {
+    background: rosybrown;
+}
+
+.block2 {
+    background: lightgreen;
+}
+
+.block3 {
+    background: goldenrod;
+}
+
+.ctx {
+    cursor: pointer;
+}
+
+.home {
+    position: absolute;
+    top: 1rem;
+    /* Header Height */
+    bottom: 1rem;
+    /* Footer Height */
+    width: 100%;
+}

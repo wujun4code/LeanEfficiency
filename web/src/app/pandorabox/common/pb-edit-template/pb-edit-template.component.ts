@@ -1,12 +1,15 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 export class PBEditField {
+  hidden: boolean;
   disabled: boolean;
   control: string;
   placeholder: string;
   tooltip: string;
   options: Array<any>;
+  name: any;
   value: any;
+  icon: string;
 }
 
 export class PBEditConfig {

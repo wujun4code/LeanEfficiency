@@ -1,4 +1,5 @@
 <div fxLayout="column" fxLayout.gt-md="row" class="work-panel">
+
   <md-card fxFlex.gt-md="20" class="work-panel">
     <md-card-title>{{ 'team-member-work-panel' | translate }}</md-card-title>
     <md-card-content fxLayout="column" fxLayoutGap="2rem">
@@ -20,12 +21,16 @@
     </md-card-content>
   </md-card>
 
-  <md-card fxFlex.gt-md="80" class="work-panel">
+  <md-card fxFlex.gt-md="80" class="work-panel" fxLayout="column">
     <md-card-title> {{ 'team-member-list' | translate }}</md-card-title>
-    <md-card-content fxLayout="column">
-      <div>
-        <md-table #table [dataSource]="dataSource">
+    <md-card-content fxLayout="column" fxFlex="100" fxFill fxLayoutAlign="center center" fxLayoutWrap fxLayoutGap="1em">
 
+      <div fxFlex="10" fxFill>
+        <pb-member-filter-panel></pb-member-filter-panel>
+      </div>
+
+      <div fxFlex="80" fxLayout="column" fxFill>
+        <md-table #table [dataSource]="dataSource" fxFlex="90">
           <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
@@ -57,10 +62,11 @@
           <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
         </md-table>
 
-        <md-paginator #paginator [length]="exampleDatabase.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]">
+        <md-paginator fxFill #paginator [length]="exampleDatabase.data.length" [pageIndex]="0" [pageSize]="15" [pageSizeOptions]="[5, 10, 15]"
+          fxFlex="10">
         </md-paginator>
       </div>
+
     </md-card-content>
   </md-card>
-
 </div>

@@ -2,7 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MdDialogRef, MdDialog } from "@angular/material";
 import { MD_DIALOG_DATA } from '@angular/material';
 import { DefaultTeamService } from '../../team';
-import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag } from '../../objects';
+import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag, PBMemberBuiltInFreezeProperties } from '../../objects';
+import { PBEditField } from '../../common/pb-edit-template/pb-edit-template.component';
 
 @Component({
   selector: 'pb-member-edit-dialog',
@@ -29,12 +30,19 @@ export class MemberEditDialogComponent implements OnInit {
     this.teamService.getMemberFields(this.role).subscribe(list => {
 
       let fields = list.map(property => {
-        return {
-          placeholder: property.get(PBMemberBuiltInProperties.placeholder),
-          tooltip: property.get(PBMemberBuiltInProperties.description),
-          value: ''
-        };
+        let field = new PBEditField();
+
+        field.placeholder = property.get(PBMemberBuiltInProperties.placeholder);
+        field.tooltip = property.get(PBMemberBuiltInProperties.description);
+        field.icon = property.get(PBMemberBuiltInProperties.icon);
+        field.name = property.get(PBMemberBuiltInProperties.propertyName);
+        field.value = '';
+        
+        //field.disabled = PBMemberBuiltInFreezeProperties.indexOf(field.name) > -1;
+
+        return field;
       });
+      console.log('fields', fields);
       this.title = `${this.view}-${this.role}`;
 
       this.editConfig = {

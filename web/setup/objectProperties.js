@@ -15,6 +15,7 @@ const memberCommonProperties =
         placeholder: 'nickName',
         category: 'member',
         subCategory: 'member',
+        icon: 'account_circle',
         scope: 'app',
     }, {
         objectName: 'PBMember',
@@ -24,6 +25,7 @@ const memberCommonProperties =
         placeholder: 'serial',
         category: 'member',
         subCategory: 'member',
+        icon: 'domain',
         scope: 'app',
     }, {
         objectName: 'PBMember',
@@ -33,6 +35,7 @@ const memberCommonProperties =
         placeholder: 'mobile',
         category: 'member',
         subCategory: 'member',
+        icon: 'call',
         scope: 'app',
     }, {
         objectName: 'PBMember',
@@ -42,6 +45,7 @@ const memberCommonProperties =
         placeholder: 'weixin',
         category: 'member',
         subCategory: 'member',
+        icon: 'chat_bubble',
         scope: 'app',
     }];
 
@@ -54,6 +58,7 @@ const technicianBuiltInProperties = [
         placeholder: 'affiliation',
         category: 'member',
         subCategory: 'member-technician',
+        icon: 'group',
         scope: 'app',
     },
 ];
@@ -67,6 +72,7 @@ const PBPropertyFields = {
     placeholder: 'placeholder',
     category: 'category',
     subCategory: 'subCategory',
+    icon: 'icon',
     scope: 'scope',
     valid: 'valid'
 }
@@ -89,6 +95,7 @@ function initPrebuiltInObjectProperties(params) {
         obj.set(PBPropertyFields.placeholder, property.placeholder);
         obj.set(PBPropertyFields.category, property.category);
         obj.set(PBPropertyFields.subCategory, property.subCategory);
+        obj.set(PBPropertyFields.icon, property.icon);
         obj.set(PBPropertyFields.scope, property.scope);
         obj.ACL = acl;
         fieldObjs.push(obj);

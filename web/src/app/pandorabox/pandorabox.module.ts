@@ -25,7 +25,7 @@ import { DashboardMasterComponent } from './dashboard/dashboard-master/dashboard
 
 // team
 import { TeamAddQuickPanelComponent } from './team/team-add-quick-panel/team-add-quick-panel.component';
-
+import { MemberFilterPanelComponent } from './team/member-filter-panel/member-filter-panel.component';
 // room
 import { RoomMasterComponent } from './room/room-master/room-master.component';
 
@@ -54,6 +54,7 @@ export const components = [
     MemberMasterComponent,
     MemberAddDialogComponent,
     MemberEditDialogComponent,
+    MemberFilterPanelComponent,
 ];
 
 // services

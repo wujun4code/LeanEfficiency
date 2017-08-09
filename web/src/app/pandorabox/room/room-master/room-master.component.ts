@@ -11,5 +11,11 @@ export class RoomMasterComponent implements OnInit {
 
   ngOnInit() {
   }
+  direction = 'row';
+  toggleDirection() {
+    let next = (DIRECTIONS.indexOf(this.direction) + 1) % DIRECTIONS.length;
+    this.direction = DIRECTIONS[next];
+  }
 
 }
+const DIRECTIONS = ['row', 'column'];

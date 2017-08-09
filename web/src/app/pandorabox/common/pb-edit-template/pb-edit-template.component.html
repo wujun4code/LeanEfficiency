@@ -1,8 +1,8 @@
-
 <div fxLayout="column">
   <div fxLayout="column" fxLayout.gt-md="row" *ngFor="let field of pbConfig.fields">
     <md-input-container fxFlex>
-      <input mdInput placeholder="{{ field.placeholder | translate}}" [(ngModel)]="field.value" >
+      <input mdInput placeholder="{{ field.placeholder | translate}}" [(ngModel)]="field.value" [disabled]="field.disabled" [hidden]="field.hidden">
+      <span md-prefix><md-icon>{{ field.icon }}</md-icon></span>
     </md-input-container>
   </div>
 </div>
