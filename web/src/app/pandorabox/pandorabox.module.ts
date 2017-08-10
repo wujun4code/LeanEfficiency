@@ -37,6 +37,7 @@ import { TicketMasterComponent } from './ticket/ticket-master/ticket-master.comp
 import { MemberMasterComponent } from './team/member-master/member-master.component';
 import { MemberAddDialogComponent } from './team/member-add-dialog/member-add-dialog.component';
 import { MemberEditDialogComponent } from './team/member-edit-dialog/member-edit-dialog.component';
+import { MemberPropertySelectDialogComponent } from './team/member-property-select-dialog/member-property-select-dialog.component';
 
 export const components = [
     PandoraBoxComponent,
@@ -55,6 +56,7 @@ export const components = [
     MemberAddDialogComponent,
     MemberEditDialogComponent,
     MemberFilterPanelComponent,
+    MemberPropertySelectDialogComponent,
 ];
 
 // services

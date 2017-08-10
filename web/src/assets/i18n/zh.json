@@ -48,6 +48,7 @@
     "staff": "成员",
     "team-member-work-panel": "成员操作面板",
     "team-member-list": "现有成员",
+    "all":"全部",
     "reception":"接待",
     "technician":"技师",
     "add-technician": "添加技师",
@@ -62,5 +63,9 @@
     "weixin":"微信",
     "basic-info":"基本资料",
     "tag":"标签",
-    "filter-member":"输入手机号/编号/昵称 等关键字..."
+    "filter-member":"输入手机号/编号/昵称 等关键字...",
+    "team-member-search-panel":"搜索成员",
+    "search":"搜索",
+    "member-select-display-property":"选择需要展示的属性",
+    "selectable-property":"可选属性"
 }

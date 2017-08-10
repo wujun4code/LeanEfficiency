@@ -1,9 +1,12 @@
-<div fxLayout="column">
+<div fxLayout="column" fxLayoutGap="1em">
+  <div>
+    <md-radio-group>
+      <md-radio-button value="0">{{ 'all' | translate }}</md-radio-button>
+      <md-radio-button value="1">{{ 'technician' | translate }}</md-radio-button>
+      <md-radio-button value="2">{{ 'reception' | translate }}</md-radio-button>
+    </md-radio-group>
+  </div>
   <md-input-container floatPlaceholder="never">
     <input mdInput placeholder="{{ 'filter-member' | translate }}">
   </md-input-container>
-  <md-radio-group>
-    <md-radio-button value="1">{{ 'technician' | translate }}</md-radio-button>
-    <md-radio-button value="2">{{ 'reception' | translate }}</md-radio-button>
-  </md-radio-group>
 </div>

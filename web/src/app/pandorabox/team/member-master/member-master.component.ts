@@ -1,16 +1,18 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { DataSource } from '@angular/cdk';
+import { DataSource, CollectionViewer } from '@angular/cdk';
 import { MdPaginator } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { RxAVObject, RxAVUser, RxAVQuery } from 'rx-lean-js-core';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import { Router, NavigationEnd } from "@angular/router";
 import 'rxjs/add/operator/map';
 import { MdDialogRef, MdDialog } from "@angular/material";
 import { MemberEditDialogComponent } from '../member-edit-dialog/member-edit-dialog.component';
+import { MemberPropertySelectDialogComponent } from '../member-property-select-dialog/member-property-select-dialog.component';
 import { DefaultTeamService } from '../../team';
-import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag } from '../../objects';
+import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag, PBMember, PBTeamUser, PBTeamUserFields, PBUser } from '../../objects';
 
 @Component({
   selector: 'pb-member-master',
@@ -19,11 +21,39 @@ import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag } 
 })
 export class MemberMasterComponent implements OnInit {
 
-  displayedColumns = ['userId', 'userName', 'progress', 'color'];
+  displayedColumns = ['serial', 'nickName', 'mobile'];
+  selectableProperties = [
+    {
+      name: 'serial',
+      selected: true
+    }, {
+      name: 'nickName',
+      selected: true
+    },
+    {
+      name: 'mobile',
+      selected: true
+    },
+    {
+      name: 'weixin',
+      selected: true
+    },
+  ];
+
+  get allColumns() {
+    return this.selectableProperties.map(c => c.name);
+  }
+
+  // get displayedColumns() {
+  //   return this.selectableProperties.filter(c => c.selected).map(c => c.name);
+  // }
+
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
+  memberSouce: PBMemberDataSource | null;
 
-  dialogRef: MdDialogRef<MemberEditDialogComponent>;
+  memberEditDialogRef: MdDialogRef<MemberEditDialogComponent>;
+  memberPropertySelectDialogRef: MdDialogRef<MemberPropertySelectDialogComponent>;
 
   constructor(private router: Router,
     public dialog: MdDialog,
@@ -37,9 +67,8 @@ export class MemberMasterComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
-
+    this.memberSouce = new PBMemberDataSource(this.paginator, this.allColumns);
     this.initAddMemberButtonMenus();
-
   }
 
   initAddMemberButtonMenus() {
@@ -59,15 +88,32 @@ export class MemberMasterComponent implements OnInit {
   }
 
   openDialog(data: any) {
-    this.dialogRef = this.dialog.open(MemberEditDialogComponent, {
+    this.memberEditDialogRef = this.dialog.open(MemberEditDialogComponent, {
       width: '48em',
       disableClose: false,
       data: data
     });
 
-    this.dialogRef.afterClosed().subscribe(result => {
+    this.memberEditDialogRef.afterClosed().subscribe(result => {
       console.log(result);
-      this.dialogRef = null;
+      this.memberEditDialogRef = null;
+    });
+  }
+
+  openPropertyViewSelectDialog(data: any) {
+    this.memberPropertySelectDialogRef = this.dialog.open(MemberPropertySelectDialogComponent, {
+      width: '32em',
+      disableClose: false,
+      data: this.selectableProperties
+    });
+
+    this.memberPropertySelectDialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.memberPropertySelectDialogRef = null;
+      if (result.cancel == false) {
+        let _displayedColumns = this.selectableProperties.filter(c => c.selected).map(c => c.name);
+        this.memberSouce = new PBMemberDataSource(this.paginator, _displayedColumns);
+      }
     });
   }
 }
@@ -135,9 +181,12 @@ export class ExampleDataSource extends DataSource<any> {
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
+
   constructor(private _exampleDatabase: ExampleDatabase, private _paginator: MdPaginator) {
     super();
-    this._paginator._intl.itemsPerPageLabel = 'xxx';
+    this._paginator._intl.itemsPerPageLabel = '每页显示:';
+    this._paginator._intl.nextPageLabel = '下一页';
+    this._paginator._intl.previousPageLabel = '上一页';
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
@@ -157,4 +206,51 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   disconnect() { }
+}
+
+export class PBMemberDataSource extends DataSource<any>{
+
+  constructor(private _paginator: MdPaginator, public displayedColumns: Array<string>) {
+    super();
+    this._paginator._intl.itemsPerPageLabel = '每页显示:';
+    this.load().subscribe(inited => {
+
+    });
+  }
+  load() {
+    let query = new RxAVQuery(PBTeamUserFields.className);
+    let teamObj = RxAVObject.createWithoutData(PBTeamFields.className, '598a7b6f570c350069a1c0f4');
+    query.equalTo(PBTeamUserFields.team, teamObj);
+    query.include(PBTeamUserFields.user);
+    return query.find().map(memberList => {
+      let db = memberList.map(member => {
+        let pbMember = new PBMember(member);
+        let pbUser = new PBUser(member.get(PBTeamUserFields.user));
+        pbMember.linkUser = pbUser;
+        return pbMember;
+      });
+      this.dataChange.next(db);
+      return db;
+    });
+  }
+  dataChange: BehaviorSubject<Array<PBMember>> = new BehaviorSubject<Array<PBMember>>([]);
+  get data(): Array<PBMember> { return this.dataChange.value; }
+  connect(collectionViewer: CollectionViewer): Observable<any[]> {
+    const displayDataChanges = [
+      this.dataChange,
+      this._paginator.page,
+    ];
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this.data.slice();
+
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
+    });
+  }
+  disconnect(collectionViewer: CollectionViewer): void {
+
+  }
+
 }

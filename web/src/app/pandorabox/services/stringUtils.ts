@@ -12,7 +12,7 @@ export class StringUtils {
         if (size % 2 !== 0) {
             throw new Error('randomHexString size must be divisible by 2.')
         }
-        
+
         return randomBytes(size / 2).toString('hex');
     }
 
@@ -70,7 +70,7 @@ export class StringUtils {
     }
 
     newMobilePhoneNumber(): string {
-        let prefix = ['138', '139', '188', '186', '189', '171', '170'];
+        let prefix = ['138', '139', '188', '186', '189', '171', '170', '156', '151', '137'];
         let chars = ('0123456789');
         let mobile = prefix[Math.floor(Math.random() * prefix.length)];
         let bytes = randomBytes(8);
