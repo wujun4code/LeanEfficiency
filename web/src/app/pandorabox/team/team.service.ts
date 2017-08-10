@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RxAVUser, RxAVQuery, RxAVObject, RxAVRole, RxAVACL } from 'rx-lean-js-core';
 import { Observable } from 'rxjs';
-import { PBTeam, PBTeamFields, PBPaymentTypeFields, PBPaymentType, PBUser, PBRole, PBBoss, PBStaff, PBMemberBuiltInProperties } from '../objects';
+import { PBTeam, PBTeamFields, PBPaymentTypeFields, PBPaymentType, PBUser, PBRole, PBBoss, PBStaff, PBMemberBuiltInProperties, PBTag } from '../objects';
 
 @Injectable()
 export class DefaultTeamService {
@@ -52,6 +52,8 @@ export class DefaultTeamService {
         });
     }
 
+    _tags: Array<PBTag> = [];
+    
     getMemberFields(subCategory?: string, team?: PBTeam) {
         let sc = subCategory ? `member-${subCategory}` : 'member';
         let builtInRoleQuery = new RxAVQuery(PBMemberBuiltInProperties.className);
@@ -69,9 +71,9 @@ export class DefaultTeamService {
             return combineQuery.find();
         }
 
-        return commonQuery.find();
+        return commonQuery.find().map(fieldList => {
+            return fieldList;
+        });
     }
-
-
 
 }

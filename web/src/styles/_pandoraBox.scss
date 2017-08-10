@@ -8,6 +8,16 @@
     margin: 0.5em;
 }
 
+.pb-home {
+    position: absolute;
+    top: 1rem;
+    /* Header Height */
+    bottom: 1rem;
+    /* Footer Height */
+    width: 100%;
+    margin: 1rem;
+}
+
 form>div {
     margin-top: 2em;
 }

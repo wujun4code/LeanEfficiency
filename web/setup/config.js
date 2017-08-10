@@ -1,11 +1,3 @@
-var rxLeanCloud = require('rx-lean-js-core');
-var RxAVObject = rxLeanCloud.RxAVObject;
-var RxAVACL = rxLeanCloud.RxAVACL;
-
-require('./appConfig');
-
-var saRoleName = 'sa';
-
 const memberCommonProperties =
     [{
         objectName: 'PBMember',
@@ -77,33 +69,8 @@ const PBPropertyFields = {
     valid: 'valid'
 }
 
-function initPrebuiltInObjectProperties(params) {
-    let fieldObjs = [];
-
-    let acl = new RxAVACL();
-    acl.setPublicWriteAccess(false);
-    acl.setWriteAccess(saRoleName, true);
-
-    let all = memberCommonProperties.concat(technicianBuiltInProperties);
-
-    all.forEach(property => {
-        let obj = new RxAVObject(PBPropertyFields.className);
-        obj.set(PBPropertyFields.objectName, property.objectName);
-        obj.set(PBPropertyFields.propertyName, property.propertyName);
-        obj.set(PBPropertyFields.description, property.description);
-        obj.set(PBPropertyFields.propertyType, property.propertyType);
-        obj.set(PBPropertyFields.placeholder, property.placeholder);
-        obj.set(PBPropertyFields.category, property.category);
-        obj.set(PBPropertyFields.subCategory, property.subCategory);
-        obj.set(PBPropertyFields.icon, property.icon);
-        obj.set(PBPropertyFields.scope, property.scope);
-        obj.ACL = acl;
-        fieldObjs.push(obj);
-    });
-
-    RxAVObject.saveAll(fieldObjs).subscribe(inited => {
-        console.log('objectProperties inited.');
-    });
+module.exports = {
+    PBPropertyFields: PBPropertyFields,
+    memberCommonProperties: memberCommonProperties,
+    technicianBuiltInProperties: technicianBuiltInProperties,
 }
-
-initPrebuiltInObjectProperties();

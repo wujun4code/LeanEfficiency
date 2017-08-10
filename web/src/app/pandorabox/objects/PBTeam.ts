@@ -75,7 +75,7 @@ export class PBTeam extends PBObject {
 
         team_user_relation_obj.set(PBTeamUserFields.user, user.metaUser);
         team_user_relation_obj.set(PBTeamUserFields.team, this.metaData);
-        team_user_relation_obj.set(PBTeamUserFields.roles, roles.map(r => r.metaRole));
+        team_user_relation_obj.set(PBTeamUserFields.roles, roles.map(r => r.metaRole.name));
 
         team_user_relation_obj.ACL = this.teamACL;
 
@@ -94,7 +94,7 @@ export class PBTeam extends PBObject {
         return team_user_relation_query.find().flatMap(list => {
             if (list.length > 0) {
                 let team_user_relation_obj = list[0];
-                team_user_relation_obj.addUnique(PBTeamUserFields.roles, user.metaUser);
+                team_user_relation_obj.addUnique(PBTeamUserFields.roles, role.metaRole.name);
                 return team_user_relation_obj.save().flatMap(added => {
                     return role.grant(user);
                 });

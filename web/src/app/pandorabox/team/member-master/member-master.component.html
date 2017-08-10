@@ -1,66 +1,76 @@
-<div fxLayout="column" fxLayout.gt-md="row" class="work-panel">
-  <md-card fxFlex.gt-md="20" class="work-panel">
-    <md-card-title>{{ 'team-member-work-panel' | translate }}</md-card-title>
-    <md-card-content fxLayout="column" fxLayoutGap="2rem">
-      <!-- <div fxLayout="row" fxLayout.gt-md="row">
-        <button md-raised-button fxFlex color="primary" (click)="openDialog('t')"><md-icon>add</md-icon>{{ 'btnAddTechnician' | translate }} </button>
-      </div>
-      <div fxLayout="row" fxLayout.gt-md="row">
-        <button md-raised-button fxFlex color="accent"><md-icon>add</md-icon>{{ 'btnAddReception' | translate }} </button>
-      </div> -->
-      <div fxLayout="column" fxLayout.gt-md="row">
-        <button md-raised-button fxFlex color="primary" [mdMenuTriggerFor]="menu"><md-icon>person_add</md-icon>{{ 'btnAddMember' | translate }}</button>
-        <md-menu #menu="mdMenu">
-          <button md-menu-item *ngFor="let menu of addMemberButtonMenus" (click)="openDialog(menu.data)">
+<div class="pb-home" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutWrap fxLayoutGap="1px" fxFlex="99">
+  <div fxFlex="20" fxLayout="column" fxFill fxHide fxShow.gt-md fxLayoutGap="1em">
+    <md-card>
+      <md-card-title>{{ 'search' | translate }}</md-card-title>
+      <md-card-content>
+        <pb-member-filter-panel></pb-member-filter-panel>
+      </md-card-content>
+      <!-- <md-card-actions>
+        <button md-raised-button fxFill color="accent"><md-icon>add</md-icon>{{ 'btnAddReception' | translate }} </button>
+      </md-card-actions> -->
+    </md-card>
+    <md-card>
+      <md-card-title>{{ 'team-member-work-panel' | translate }}</md-card-title>
+      <md-card-content>
+        <div>
+          <button md-raised-button fxFlex color="primary" [mdMenuTriggerFor]="menu"><md-icon>person_add</md-icon>{{ 'btnAddMember' | translate }}</button>
+          <md-menu #menu="mdMenu">
+            <button md-menu-item *ngFor="let menu of addMemberButtonMenus" (click)="openDialog(menu.data)">
             <md-icon> {{ menu.icon }} </md-icon>
             <span> {{ menu.text | translate }} </span>
           </button>
-        </md-menu>
-      </div>
-    </md-card-content>
-  </md-card>
-
-  <md-card fxFlex.gt-md="80" class="work-panel">
-    <md-card-title> {{ 'team-member-list' | translate }}</md-card-title>
-    <md-card-content fxLayout="column">
-      <div>
-        <md-table #table [dataSource]="dataSource">
-
-          <!--- Note that these columns can be defined in any order.
+          </md-menu>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
+  <div fxFlex="78" fxFill>
+    <md-card>
+      <md-card-title> {{ 'team-member-list' | translate }}</md-card-title>
+      <md-card-content>
+        <div>
+          <md-table #table [dataSource]="memberSouce">
+            <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
-          <!-- ID Column -->
-          <ng-container cdkColumnDef="userId">
-            <md-header-cell *cdkHeaderCellDef> ID </md-header-cell>
-            <md-cell *cdkCellDef="let row"> {{row.id}} </md-cell>
-          </ng-container>
 
-          <!-- Progress Column -->
-          <ng-container cdkColumnDef="progress">
-            <md-header-cell *cdkHeaderCellDef> Progress </md-header-cell>
-            <md-cell *cdkCellDef="let row"> {{row.progress}}% </md-cell>
-          </ng-container>
+            <!-- <ng-container cdkColumnDef="serial">
+              <md-header-cell *cdkHeaderCellDef> serial </md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.serial}} </md-cell>
+            </ng-container>
 
-          <!-- Name Column -->
-          <ng-container cdkColumnDef="userName">
-            <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
-            <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
-          </ng-container>
+            <ng-container cdkColumnDef="nickName">
+              <md-header-cell *cdkHeaderCellDef> nickName </md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.nickName}} </md-cell>
+            </ng-container>
 
-          <!-- Color Column -->
-          <ng-container cdkColumnDef="color">
-            <md-header-cell *cdkHeaderCellDef> Color </md-header-cell>
-            <md-cell *cdkCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>
-          </ng-container>
+            <ng-container cdkColumnDef="mobile">
+              <md-header-cell *cdkHeaderCellDef> mobile </md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.mobile}} </md-cell>
+            </ng-container> -->
 
-          <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-          <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
-        </md-table>
 
-        <md-paginator #paginator [length]="exampleDatabase.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]">
-        </md-paginator>
-      </div>
-    </md-card-content>
-  </md-card>
+            <ng-container *ngFor="let column of memberSouce.displayedColumns" cdkColumnDef="{{column}}">
+              <md-header-cell *cdkHeaderCellDef>{{ column | translate }} </md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{row.getValue(column)}} </md-cell>
+            </ng-container>
 
+            <md-header-row *cdkHeaderRowDef="memberSouce.displayedColumns"></md-header-row>
+            <md-row *cdkRowDef="let row; columns: memberSouce.displayedColumns;"></md-row>
+          </md-table>
+
+          <md-paginator #paginator [length]="memberSouce.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]"></md-paginator>
+        </div>
+      </md-card-content>
+      <md-card-actions>
+        <div fxLayout="row">
+          <button md-icon-button mdTooltip="列表设置" (click)="openPropertyViewSelectDialog('member-property')"><md-icon>settings</md-icon></button>
+          <!-- <button md-icon-button><md-icon>favorite</md-icon></button>
+          <span fxFlex></span>
+          <button md-button>More Info</button>
+          <button md-button>Save as</button> -->
+        </div>
+      </md-card-actions>
+    </md-card>
+  </div>
 </div>

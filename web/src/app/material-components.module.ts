@@ -7,7 +7,7 @@ import {
   MdMenuModule, MdNativeDateModule, MdProgressBarModule, MdProgressSpinnerModule, MdSelectModule,
   MdSidenavModule,
   MdSliderModule,
-  MdSlideToggleModule, MdSnackBarModule, MdTabsModule, MdToolbarModule, MdTooltipModule, MdTableModule, MdPaginatorModule
+  MdSlideToggleModule, MdSnackBarModule, MdTabsModule, MdToolbarModule, MdTooltipModule, MdTableModule, MdPaginatorModule, MdChipsModule, MdRadioModule
 } from '@angular/material';
 
 @NgModule({
@@ -41,6 +41,8 @@ import {
     MdTableModule,
     MdPaginatorModule,
     CdkTableModule,
+    MdChipsModule,
+    MdRadioModule,
   ]
 })
 export class MaterialComponentsModule { }
