@@ -6,3 +6,8 @@ export { PBRole, PBBoss, PBStaff } from './PBRole';
 export { PBTeamUser, PBTeamUserFields } from './PBTeamUser';
 export { PBMember, PBMemberBuiltInProperties, PBMemberKeys, PBMemberBuiltInFreezeProperties } from './PBMember';
 export { PBTag, PBTagFields } from './PBTag';
+export { PBRoom, PBRoomFields } from './PBRoom';
+export { PBTicket, PBTicketFields } from './PBTicket';
+export { PBService, PBServiceFields } from './PBService';
+export { PBDailyReport } from './PBDailyReport';
+export { PBProjectTechnician, PBProjectTechnicianFields } from './PBProjectTechnician';

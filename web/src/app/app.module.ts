@@ -47,7 +47,8 @@ RxAVClient.init({
   plugins: {
     websocket: ngRxLeanCloud.ngWebSocketClient,
     storage: ngRxLeanCloud.ngStorage
-  }
+  },
+  log: true
 }).add(app);
 
 @NgModule({

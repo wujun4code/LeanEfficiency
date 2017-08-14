@@ -1,0 +1,19 @@
+
+<div class="pb-panel" fxLayout="row" fxLayoutAlign="start start" fxLayoutWrap fxLayoutGap="2em" fxFlex="100" fxFlexAlign="stretch">
+    <h1>{{ 'switch-team-title' | translate }}</h1>
+    
+    
+    <md-dialog-content fxFill fxFlex="100">
+      <div fxLayout="row" fxLayout.gt-sm="row" fxLayoutGap="5em">
+        <md-select placeholder="{{ 'switch-team' | translate }}" fxFill>
+          <md-option *ngFor="let team of teams" [value]="team">{{ team.name }} </md-option>
+        </md-select>
+      </div>
+    </md-dialog-content>
+    
+    <md-dialog-actions align="end" fxFill fxFlex="100">
+      <button md-button (click)="dialogRef.close('No!')">{{ 'btnCancel' | translate }}</button>
+      <button md-button color="warn" (click)="logout()">{{ 'btnConfirm' | translate }}</button>
+    </md-dialog-actions>
+    
+</div>

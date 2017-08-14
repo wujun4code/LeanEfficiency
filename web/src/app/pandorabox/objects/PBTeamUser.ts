@@ -11,5 +11,6 @@ export const PBTeamUserFields = {
     className: 'PBTeamUser',
     user: 'user',
     team: 'team',
+    serial: 'serial',
     roles: 'roles',
 }

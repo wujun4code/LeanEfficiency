@@ -3,8 +3,8 @@ var RxAVObject = rxLeanCloud.RxAVObject;
 var RxAVACL = rxLeanCloud.RxAVACL;
 
 require('./appConfig');
+var config = require('./config');
 
-var saRoleName = 'sa';
 
 const memberCommonProperties =
     [{
@@ -80,10 +80,6 @@ const PBPropertyFields = {
 function initPrebuiltInObjectProperties(params) {
     let fieldObjs = [];
 
-    let acl = new RxAVACL();
-    acl.setPublicWriteAccess(false);
-    acl.setWriteAccess(saRoleName, true);
-
     let all = memberCommonProperties.concat(technicianBuiltInProperties);
 
     all.forEach(property => {
@@ -97,7 +93,7 @@ function initPrebuiltInObjectProperties(params) {
         obj.set(PBPropertyFields.subCategory, property.subCategory);
         obj.set(PBPropertyFields.icon, property.icon);
         obj.set(PBPropertyFields.scope, property.scope);
-        obj.ACL = acl;
+        obj.ACL = config.saACL;
         fieldObjs.push(obj);
     });
 

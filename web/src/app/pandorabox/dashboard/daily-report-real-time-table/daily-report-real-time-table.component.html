@@ -1,0 +1,14 @@
+<md-table [dataSource]="dailySource" mdSort>
+
+  <ng-container *ngFor="let column of dailySource.displayedColumns" cdkColumnDef="{{column}}">
+    <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column | translate }} </md-header-cell>
+    <md-cell *cdkCellDef="let row"> {{ row.get(column) | translate }} </md-cell>
+  </ng-container>
+
+  <md-header-row *cdkHeaderRowDef="dailySource.displayedColumns"></md-header-row>
+  <md-row *cdkRowDef="let row; columns: dailySource.displayedColumns;"></md-row>
+</md-table>
+
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <md-paginator #pager [length]="dailySource.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 15, 20, 25, 30]"></md-paginator>
+</div>

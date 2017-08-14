@@ -1,9 +1,10 @@
 import { PBObject } from './PBObject';
 import { Observable } from 'rxjs';
+import { RxAVObject, RxAVACL, RxAVRole, RxAVQuery } from 'rx-lean-js-core';
+
 import { PBRole } from './PBRole';
 import { PBUser } from './PBUser';
 import { PBTeamUserFields } from './PBTeamUser';
-import { RxAVObject, RxAVACL, RxAVRole, RxAVQuery } from 'rx-lean-js-core';
 const _hasOwnProperty = Object.prototype.hasOwnProperty;
 export const has = function (obj: any, prop: any) {
     return _hasOwnProperty.call(obj, prop);
@@ -13,14 +14,23 @@ export class PBMember extends PBObject {
         super(memberObj);
     }
 
-    linkUser: PBUser;
+    _user: PBUser;
+
+    get linkUser(): PBUser {
+        if (this._user == undefined)
+            this._user = new PBUser(this.user);
+        return this._user;
+    }
+    get user() {
+        return this.metaData.get(PBTeamUserFields.user);
+    }
 
     get mobile() {
         return this.linkUser.metaUser.mobilephone;
     }
 
     get serial() {
-        return this.linkUser.metaUser.get('serial');
+        return this.metaData.get(PBTeamUserFields.serial);
     }
 
     get nickName() {

@@ -1,6 +1,156 @@
-<div class="pb-home" [fxLayout]="direction" (click)="toggleDirection()" fxLayoutAlign="center center" fxLayoutWrap fxLayoutGap="1em"
+<!-- <div class="pb-home" [fxLayout]="direction" (click)="toggleDirection()" fxLayoutAlign="space-between center" fxLayoutWrap fxLayoutGap="1em"
   fxFlex="100">
   <div fxFlex="20" fxFill class="block1"> fxFlex="20"</div>
-  <div fxFlex="60" fxFill class="block2"> fxFlex="60"</div>
+  <div fxFlex="65" fxFill class="block2"> fxFlex="60"</div>
   <div fxFlex="10" fxFill class="block3"> fxFlex="10"</div>
+</div>  -->
+
+<div class="pb-panel" fxLayout="row" fxLayoutAlign="start start" fxLayoutWrap [fxLayoutGap]="flexGap" fxFlex="100" fxFlexAlign="stretch">
+
+  <div [fxFlex]="leftPanel" fxFill [fxLayoutGap]="flexGap">
+
+    <div [fxFlex]="halfPanel" fxFill>
+      <md-card fxFlex>
+        <md-card-title></md-card-title>
+        <md-card-subtitle></md-card-subtitle>
+        <md-card-content>
+          <chart [options]="roomDoughnutChartOptions"></chart>
+        </md-card-content>
+        <md-card-footer>
+        </md-card-footer>
+      </md-card>
+    </div>
+
+    <div [fxFlex]="halfPanel" fxFill>
+      <md-card fxFlex>
+        <md-card-title></md-card-title>
+        <md-card-subtitle></md-card-subtitle>
+        <md-card-content>
+          <chart [options]="technicianDoughnutChartOptions"></chart>
+        </md-card-content>
+        <md-card-footer> </md-card-footer>
+      </md-card>
+    </div>
+  </div>
+
+  <div [fxFlex]="leftPanel" fxFill fxLayout="row" class="dashboar-ticket-panel" [fxLayoutGap]="flexGap">
+
+    <md-card fxFlex>
+      <md-card-title></md-card-title>
+      <md-card-subtitle></md-card-subtitle>
+      <md-card-content fxLayout="row">
+        <div fxFlex="75" fxFill>
+          <md-table #ticketSort [dataSource]="ticketSource" mdSort>
+            <ng-container *ngFor="let column of ticketSource.displayedColumns" cdkColumnDef="{{column}}">
+              <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column | translate }} </md-header-cell>
+              <md-cell *cdkCellDef="let row"> {{ row.get(column) | translate }} </md-cell>
+            </ng-container>
+
+            <md-header-row *cdkHeaderRowDef="ticketSource.displayedColumns"></md-header-row>
+            <md-row *cdkRowDef="let row; columns: ticketSource.displayedColumns;"></md-row>
+          </md-table>
+
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <md-paginator #ticketPager [length]="ticketSource.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10]"></md-paginator>
+          </div>
+        </div>
+        <chart fxFlex="25" fxFill [options]="ticketDoughnutChartOptions"></chart>
+      </md-card-content>
+      <md-card-footer> </md-card-footer>
+    </md-card>
+  </div>
+
+  <div [fxFlex]="leftPanel" fxFill fxLayout="row" class="dashboar-revenue-panel" [fxLayoutGap]="flexGap">
+    <md-card fxFlex>
+      <md-card-title>{{ 'revenue-real-time' | translate }}</md-card-title>
+      <md-card-subtitle></md-card-subtitle>
+      <md-card-content>
+        <md-tab-group>
+          <md-tab label="{{ 'daily-report-real-time' | translate }}">
+            <pb-daily-report-real-time-table></pb-daily-report-real-time-table>
+          </md-tab>
+          <md-tab label="{{ 'turn-in-real-time' | translate }}" disabled>Content 2</md-tab>
+        </md-tab-group>
+      </md-card-content>
+      <md-card-footer> </md-card-footer>
+    </md-card>
+  </div>
+
 </div>
+
+<!-- <div class="pb-panel" fxLayout="row" (click)="toggleDirection()" fxLayoutAlign="start start" fxLayoutWrap [fxLayoutGap]="flexGap"
+  fxFlex="100">
+
+  <div [fxFlex]="leftPanelFlexPercent" fxLayout="column" [fxLayoutGap]="flexGap">
+    <div [fxFlex]="mainFlexColumnPercent" fxFill [fxLayoutGap]="flexGap">
+      <div [fxFlex]="doughnutFlexRowPercent" fxFill>
+        <md-card fxFlex>
+          <md-card-title></md-card-title>
+          <md-card-subtitle></md-card-subtitle>
+          <md-card-content>
+            <chart [options]="roomDoughnutChartOptions"></chart>
+          </md-card-content>
+          <md-divider></md-divider>
+          <md-card-footer>
+          </md-card-footer>
+        </md-card>
+      </div>
+      <div [fxFlex]="doughnutFlexRowPercent" fxFill>
+        <md-card fxFlex>
+          <md-card-title></md-card-title>
+          <md-card-subtitle></md-card-subtitle>
+          <md-card-content>
+            <chart [options]="technicianDoughnutChartOptions"></chart>
+          </md-card-content>
+          <md-card-footer> </md-card-footer>
+        </md-card>
+      </div>
+    </div>
+
+    <div [fxFlex]="doughnutFlexColumnPercent" fxLayout="row" [fxLayoutGap]="flexGap">
+      <div fxFill>
+        <md-card fxFlex>
+          <md-card-title></md-card-title>
+          <md-card-subtitle></md-card-subtitle>
+          <md-card-content fxLayout="row">
+            <div fxFlex="75" fxFill>
+              <md-card fxFlex>
+                <md-card-title></md-card-title>
+                <md-card-subtitle></md-card-subtitle>
+                <md-card-content>
+                  <md-table #table [dataSource]="ticketSource" mdSort>
+
+                    <ng-container *ngFor="let column of ticketSource.displayedColumns" cdkColumnDef="{{column}}">
+                      <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column | translate }} </md-header-cell>
+                      <md-cell *cdkCellDef="let row"> {{ row.get(column) | translate }} </md-cell>
+                    </ng-container>
+
+                    <md-header-row *cdkHeaderRowDef="ticketSource.displayedColumns"></md-header-row>
+                    <md-row *cdkRowDef="let row; columns: ticketSource.displayedColumns;"></md-row>
+                  </md-table>
+
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <md-paginator #paginator [length]="ticketSource.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10]"></md-paginator>
+                  </div>
+                </md-card-content>
+                <md-card-footer> </md-card-footer>
+              </md-card>
+            </div>
+            <chart fxFlex="25" fxFill [options]="ticketDoughnutChartOptions"></chart>
+          </md-card-content>
+          <md-card-footer> </md-card-footer>
+        </md-card>
+      </div>
+    </div>
+
+    <div [fxFlex]="mainFlexColumnPercent" fxFill>
+      <md-card fxFlex>
+        <md-card-title>营收</md-card-title>
+        <md-card-subtitle></md-card-subtitle>
+        <md-card-content>
+        </md-card-content>
+        <md-card-footer> </md-card-footer>
+      </md-card>
+    </div>
+  </div>
+</div> -->

@@ -7,12 +7,17 @@ import { MediaChange } from "@angular/flex-layout";
 import { Router, NavigationEnd } from "@angular/router";
 import { MediaReplayService } from "../../core/sidenav/mediareplay/media-replay.service";
 import { MdDialogRef, MdDialog } from "@angular/material";
+import { MD_DIALOG_DATA } from '@angular/material';
 
 
 // user panle model
 import { ToolBarUserModel, ActionModel } from '../../core/toolbar/models/user';
 import { DefaultSignUpService } from '../auth/signup/signup.service';
 import { DefaultAuthService } from '../auth/auth.service';
+
+// switch team component
+import { TeamSwitchDialogComponent } from '../team/team-switch-dialog/team-switch-dialog.component';
+import { PBTeam } from '../objects';
 
 @Component({
   selector: 'pb-layout',
@@ -44,14 +49,25 @@ export class LayoutComponent implements OnInit, OnDestroy {
       this.userPanel.id = pbUser.metaUser.objectId;
       this.userPanel.nameText = pbUser.nameText;
       this.userPanel.actions = [];
+
+      let switchTeamAction = new ActionModel();
+      switchTeamAction.actionText = 'switch-team';
+      switchTeamAction.icon = 'exit_to_app'
+
+      switchTeamAction.action = () => {
+        this.openSwitchTeamDialog();
+      };
+
+      this.userPanel.actions.push(switchTeamAction);
+
       let logoutAction = new ActionModel();
       logoutAction.actionText = 'logOut';
-      logoutAction.icon = 'exit_to_app';
+      logoutAction.icon = 'power_settings_new';
       logoutAction.action = () => {
         this.openDialog();
       };
-
       this.userPanel.actions.push(logoutAction);
+
     });
   }
 
@@ -78,17 +94,33 @@ export class LayoutComponent implements OnInit, OnDestroy {
   onActivate(e, scrollContainer) {
     scrollContainer.scrollTop = 0;
   }
-  dialogRef: MdDialogRef<DemoDialog>;
+  dialogRef: MdDialogRef<LogOutDialog>;
   result: string;
 
   openDialog() {
-    this.dialogRef = this.dialog.open(DemoDialog, {
+    this.dialogRef = this.dialog.open(LogOutDialog, {
       disableClose: false
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
       this.result = result;
       this.dialogRef = null;
+    });
+  }
+
+  switchTeamDialog: MdDialogRef<TeamSwitchDialogComponent>;
+  selectedTeam: PBTeam;
+
+  openSwitchTeamDialog() {
+    this.switchTeamDialog = this.dialog.open(TeamSwitchDialogComponent, {
+      disableClose: false,
+      width: '48em',
+      height: '32em'
+    });
+
+    this.switchTeamDialog.afterClosed().subscribe(result => {
+      this.dialogRef = null;
+      console.log(result);
     });
   }
 
@@ -105,8 +137,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   </md-dialog-actions>
   `
 })
-export class DemoDialog {
-  constructor(public dialogRef: MdDialogRef<DemoDialog>,
+export class LogOutDialog {
+  constructor(public dialogRef: MdDialogRef<LogOutDialog>,
     private router: Router,
     public authService: DefaultAuthService) {
 

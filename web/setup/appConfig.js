@@ -9,4 +9,6 @@ let app = new RxAVApp({
 });
 
 RxAVClient.init({
+    log: true
 }).add(app);
+
