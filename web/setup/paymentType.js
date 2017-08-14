@@ -3,6 +3,7 @@ var RxAVObject = rxLeanCloud.RxAVObject;
 var RxAVACL = rxLeanCloud.RxAVACL;
 
 require('./appConfig');
+var config = require('./config');
 
 var saRoleName = 'sa';
 
@@ -35,35 +36,19 @@ const paymentTypes =
         technician: 180
     }];
 
-const PBPaymentTypeFields = {
-    className: 'PBPaymentType',
-    sum: 'sum',
-    name: 'name',
-    boss: 'boss',
-    manager: 'manager',
-    cashier: 'cashier',
-    reception: 'reception',
-    technician: 'technician',
-    valid: 'valid'
-}
-
 function initPaymentTypes() {
     let paymentObjs = [];
 
-    let acl = new RxAVACL();
-    acl.setPublicWriteAccess(false);
-    acl.setWriteAccess(saRoleName, true);
-
     paymentTypes.forEach(paymentType => {
-        let obj = new RxAVObject(PBPaymentTypeFields.className);
-        obj.set(PBPaymentTypeFields.name, paymentType.name);
-        obj.set(PBPaymentTypeFields.sum, paymentType.sum);
-        obj.set(PBPaymentTypeFields.boss, paymentType.boss);
-        obj.set(PBPaymentTypeFields.manager, paymentType.manager);
-        obj.set(PBPaymentTypeFields.cashier, paymentType.cashier);
-        obj.set(PBPaymentTypeFields.reception, paymentType.reception);
-        obj.set(PBPaymentTypeFields.technician, paymentType.technician);
-        obj.ACL = acl;
+        let obj = new RxAVObject(config.PBPaymentTypeFields.className);
+        obj.set(config.PBPaymentTypeFields.name, paymentType.name);
+        obj.set(config.PBPaymentTypeFields.sum, paymentType.sum);
+        obj.set(config.PBPaymentTypeFields.boss, paymentType.boss);
+        obj.set(config.PBPaymentTypeFields.manager, paymentType.manager);
+        obj.set(config.PBPaymentTypeFields.cashier, paymentType.cashier);
+        obj.set(config.PBPaymentTypeFields.reception, paymentType.reception);
+        obj.set(config.PBPaymentTypeFields.technician, paymentType.technician);
+        obj.ACL = config.saACL;
         paymentObjs.push(obj);
     });
 

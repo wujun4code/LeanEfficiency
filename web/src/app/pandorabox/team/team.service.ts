@@ -1,10 +1,64 @@
 import { Injectable } from '@angular/core';
 import { RxAVUser, RxAVQuery, RxAVObject, RxAVRole, RxAVACL } from 'rx-lean-js-core';
-import { Observable } from 'rxjs';
-import { PBTeam, PBTeamFields, PBPaymentTypeFields, PBPaymentType, PBUser, PBRole, PBBoss, PBStaff, PBMemberBuiltInProperties, PBTag } from '../objects';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { PBTeam, PBTeamFields, PBPaymentTypeFields, PBTeamUserFields, PBPaymentType, PBUser, PBRole, PBBoss, PBStaff, PBMemberBuiltInProperties, PBTag } from '../objects';
+import { DefaultAuthService } from '../auth/auth.service';
+
 
 @Injectable()
 export class DefaultTeamService {
+
+    constructor(public userService: DefaultAuthService) {
+        // this.userService.currentUser().flatMap(user => {
+        //     return this.loadTeams(user);
+        // }).subscribe(userTeamsLoaded => {
+        //     this._team = userTeamsLoaded[0];
+        //     this.teamChanged = new BehaviorSubject<PBTeam>(this._team);
+        // });
+    }
+
+    teamChanged: BehaviorSubject<PBTeam>;
+
+    _teams: Array<PBTeam> = [];
+    _team: PBTeam;
+
+    current() {
+        return this.userService.currentUser().flatMap(user => {
+            return this.loadTeams(user);
+        }).map(userTeamsLoaded => {
+            this._team = userTeamsLoaded[0];
+            this.teamChanged = new BehaviorSubject<PBTeam>(this._team);
+            return this._team;
+        });
+    }
+
+    get validTeams() {
+        return this._teams;
+    }
+
+
+    loadCurrentTeams() {
+
+    }
+
+    loadTeams(user: PBUser) {
+        return this.getTeamQuery(user).map(teams => {
+            this._teams = teams;
+            return this._teams;
+        });
+    }
+
+    getTeamQuery(user: PBUser) {
+        let teamQuery = new RxAVQuery(PBTeamUserFields.className);
+        teamQuery.equalTo(PBTeamUserFields.user, user.metaUser);
+        teamQuery.include(PBTeamUserFields.team);
+        return teamQuery.find().map(memberMapTeams => {
+            return memberMapTeams.map(member => {
+                let teamObj = member.get(PBTeamUserFields.team);
+                return new PBTeam(teamObj);
+            });
+        });
+    }
 
     fetchPaymentType(): Observable<Array<PBPaymentType>> {
         let query = new RxAVQuery(PBPaymentTypeFields.className);
@@ -53,7 +107,7 @@ export class DefaultTeamService {
     }
 
     _tags: Array<PBTag> = [];
-    
+
     getMemberFields(subCategory?: string, team?: PBTeam) {
         let sc = subCategory ? `member-${subCategory}` : 'member';
         let builtInRoleQuery = new RxAVQuery(PBMemberBuiltInProperties.className);

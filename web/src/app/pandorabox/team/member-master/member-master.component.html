@@ -29,29 +29,10 @@
       <md-card-title> {{ 'team-member-list' | translate }}</md-card-title>
       <md-card-content>
         <div>
-          <md-table #table [dataSource]="memberSouce">
-            <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-
-            <!-- <ng-container cdkColumnDef="serial">
-              <md-header-cell *cdkHeaderCellDef> serial </md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.serial}} </md-cell>
-            </ng-container>
-
-            <ng-container cdkColumnDef="nickName">
-              <md-header-cell *cdkHeaderCellDef> nickName </md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.nickName}} </md-cell>
-            </ng-container>
-
-            <ng-container cdkColumnDef="mobile">
-              <md-header-cell *cdkHeaderCellDef> mobile </md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.mobile}} </md-cell>
-            </ng-container> -->
-
-
+          <md-table #table [dataSource]="memberSouce" mdSort>
+            
             <ng-container *ngFor="let column of memberSouce.displayedColumns" cdkColumnDef="{{column}}">
-              <md-header-cell *cdkHeaderCellDef>{{ column | translate }} </md-header-cell>
+              <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column | translate }} </md-header-cell>
               <md-cell *cdkCellDef="let row"> {{row.getValue(column)}} </md-cell>
             </ng-container>
 
@@ -59,18 +40,22 @@
             <md-row *cdkRowDef="let row; columns: memberSouce.displayedColumns;"></md-row>
           </md-table>
 
-          <md-paginator #paginator [length]="memberSouce.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]"></md-paginator>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <button md-icon-button mdTooltip="列表设置" (click)="openPropertyViewSelectDialog('member-property')"><md-icon>settings</md-icon></button>
+            <md-paginator #paginator [length]="memberSouce.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]"></md-paginator>
+          </div>
+
         </div>
       </md-card-content>
-      <md-card-actions>
+      <!-- <md-card-actions>
         <div fxLayout="row">
-          <button md-icon-button mdTooltip="列表设置" (click)="openPropertyViewSelectDialog('member-property')"><md-icon>settings</md-icon></button>
-          <!-- <button md-icon-button><md-icon>favorite</md-icon></button>
+
+           <button md-icon-button><md-icon>favorite</md-icon></button>
           <span fxFlex></span>
           <button md-button>More Info</button>
-          <button md-button>Save as</button> -->
+          <button md-button>Save as</button> 
         </div>
-      </md-card-actions>
+      </md-card-actions> -->
     </md-card>
   </div>
 </div>

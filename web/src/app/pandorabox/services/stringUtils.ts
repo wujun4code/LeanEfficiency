@@ -91,4 +91,12 @@ export class StringUtils {
         }
         return str;
     }
+
+    grab(str: string) {
+        let r = str.match(/\\d+\\.?\\d*/g);
+        if (r.length > 0) {
+            return r[0];
+        }
+        return str;
+    }
 }

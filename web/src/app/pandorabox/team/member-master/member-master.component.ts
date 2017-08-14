@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { DataSource, CollectionViewer } from '@angular/cdk';
-import { MdPaginator } from '@angular/material';
+import { MdPaginator, MdSort } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { RxAVObject, RxAVUser, RxAVQuery } from 'rx-lean-js-core';
@@ -12,6 +12,7 @@ import { MdDialogRef, MdDialog } from "@angular/material";
 import { MemberEditDialogComponent } from '../member-edit-dialog/member-edit-dialog.component';
 import { MemberPropertySelectDialogComponent } from '../member-property-select-dialog/member-property-select-dialog.component';
 import { DefaultTeamService } from '../../team';
+import { StringUtils } from '../../services/stringUtils';
 import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag, PBMember, PBTeamUser, PBTeamUserFields, PBUser } from '../../objects';
 
 @Component({
@@ -57,17 +58,18 @@ export class MemberMasterComponent implements OnInit {
 
   constructor(private router: Router,
     public dialog: MdDialog,
-    public teamService: DefaultTeamService) {
+    public teamService: DefaultTeamService,
+    public stringService: StringUtils) {
 
   }
   addMemberButtonMenus: Array<any> = [];
 
 
   @ViewChild(MdPaginator) paginator: MdPaginator;
-
+  @ViewChild(MdSort) sort: MdSort;
   ngOnInit() {
-    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
-    this.memberSouce = new PBMemberDataSource(this.paginator, this.allColumns);
+    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
+    this.memberSouce = new PBMemberDataSource(this.paginator, this.allColumns, this.sort);
     this.initAddMemberButtonMenus();
   }
 
@@ -112,7 +114,7 @@ export class MemberMasterComponent implements OnInit {
       this.memberPropertySelectDialogRef = null;
       if (result.cancel == false) {
         let _displayedColumns = this.selectableProperties.filter(c => c.selected).map(c => c.name);
-        this.memberSouce = new PBMemberDataSource(this.paginator, _displayedColumns);
+        this.memberSouce = new PBMemberDataSource(this.paginator, _displayedColumns, this.sort);
       }
     });
   }
@@ -182,7 +184,7 @@ export class ExampleDataSource extends DataSource<any> {
   set filter(filter: string) { this._filterChange.next(filter); }
 
 
-  constructor(private _exampleDatabase: ExampleDatabase, private _paginator: MdPaginator) {
+  constructor(private _exampleDatabase: ExampleDatabase, private _paginator: MdPaginator, public _sort: MdSort) {
     super();
     this._paginator._intl.itemsPerPageLabel = '每页显示:';
     this._paginator._intl.nextPageLabel = '下一页';
@@ -210,9 +212,11 @@ export class ExampleDataSource extends DataSource<any> {
 
 export class PBMemberDataSource extends DataSource<any>{
 
-  constructor(private _paginator: MdPaginator, public displayedColumns: Array<string>) {
+  constructor(private _paginator: MdPaginator, public displayedColumns: Array<string>, public _sort: MdSort) {
     super();
     this._paginator._intl.itemsPerPageLabel = '每页显示:';
+    this._paginator._intl.nextPageLabel = '下一页';
+    this._paginator._intl.previousPageLabel = '上一页';
     this.load().subscribe(inited => {
 
     });
@@ -225,8 +229,8 @@ export class PBMemberDataSource extends DataSource<any>{
     return query.find().map(memberList => {
       let db = memberList.map(member => {
         let pbMember = new PBMember(member);
-        let pbUser = new PBUser(member.get(PBTeamUserFields.user));
-        pbMember.linkUser = pbUser;
+        // let pbUser = new PBUser(member.get(PBTeamUserFields.user));
+        // pbMember.linkUser = pbUser;
         return pbMember;
       });
       this.dataChange.next(db);
@@ -239,10 +243,11 @@ export class PBMemberDataSource extends DataSource<any>{
     const displayDataChanges = [
       this.dataChange,
       this._paginator.page,
+      this._sort.mdSortChange,
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
-      const data = this.data.slice();
+      const data = this.getSortedData();
 
       // Grab the page's slice of data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
@@ -252,5 +257,33 @@ export class PBMemberDataSource extends DataSource<any>{
   disconnect(collectionViewer: CollectionViewer): void {
 
   }
+  grab(str: string) {
+    let r = str.match(/\d+/);
+    if (r != null) {
+      if (r.length > 0) {
+        return r[0];
+      }
+    }
+    return str;
+  }
+  getSortedData() {
+    const data = this.data.slice();
+    if (!this._sort.active || this._sort.direction == '') { return data; }
+    return data.sort((a, b) => {
+      let propertyA: number | string = '';
+      let propertyB: number | string = '';
 
+      switch (this._sort.active) {
+        case 'serial': [propertyA, propertyB] = [this.grab(a.serial), this.grab(b.serial)]; break;
+        case 'nickName': [propertyA, propertyB] = [a.nickName, b.nickName]; break;
+        case 'mobile': [propertyA, propertyB] = [this.grab(a.mobile), this.grab(b.mobile)]; break;
+        case 'weixin': [propertyA, propertyB] = [a.weixin, b.weixin]; break;
+      }
+
+      let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+      let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+
+      return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
+    });
+  }
 }

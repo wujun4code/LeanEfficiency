@@ -6,12 +6,15 @@ export class PBObject {
     constructor(serverObj: RxAVObject) {
         this.metaData = serverObj;
     }
+
     get id() {
         return this.metaData.objectId;
     }
+
     get metaData() {
         return this._metaData;
     }
+
     set metaData(v: RxAVObject) {
         this._metaData = v;
     }
@@ -31,5 +34,8 @@ export class PBObject {
     }
     copy() {
 
+    }
+    get(key: string) {
+        return this[key];
     }
 }

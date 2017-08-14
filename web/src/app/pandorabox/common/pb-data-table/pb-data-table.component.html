@@ -1,0 +1,25 @@
+<md-card>
+  <md-card-title> {{ title | translate }}</md-card-title>
+  <md-card-content>
+    <div>
+      <md-table #table [dataSource]="dataSource" mdSort>
+
+        <ng-container *ngFor="let column of dataSource.displayedColumns" cdkColumnDef="{{column}}">
+          <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column | translate }} </md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{ row[column] | translate }} </md-cell>
+        </ng-container>
+
+        <md-header-row *cdkHeaderRowDef="dataSource.displayedColumns"></md-header-row>
+        <md-row *cdkRowDef="let row; columns: dataSource.displayedColumns;"></md-row>
+      </md-table>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div *ngIf="footerActions.length > 0">
+          <button *ngFor="let fa of footerActions" md-icon-button mdTooltip="{{ fa.mdTooltip | translate }}" (click)="fa.onClick()"><md-icon>{{ fa.mdIcon }}</md-icon></button>
+        </div>
+        <md-paginator #pager [length]="dataSource.data.length" [pageIndex]="0" [pageSize]="_pagerConfig.pageSize" [pageSizeOptions]="_pagerConfig.pageSizeOptions"></md-paginator>
+      </div>
+
+    </div>
+  </md-card-content>
+</md-card>

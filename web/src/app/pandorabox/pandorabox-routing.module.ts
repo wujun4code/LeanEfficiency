@@ -13,7 +13,7 @@ import { LayoutComponent } from './layout/layout.component';
 
 // dashboard
 import { DashboardMasterComponent } from './dashboard/dashboard-master/dashboard-master.component';
-
+import { DashboardLayoutV1Component } from './dashboard/dashboard-layout-v1/dashboard-layout-v1.component';
 // team
 import { TeamAddQuickPanelComponent } from './team/team-add-quick-panel/team-add-quick-panel.component';
 

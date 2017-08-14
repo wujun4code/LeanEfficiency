@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, Inject} from '@angular/core';
-import {D3, D3ChartService} from "../../charts/nvD3/nvD3.service";
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { D3, D3ChartService } from "../../charts/nvD3/nvD3.service";
 
 @Component({
   selector: 'ms-pie-chart',
@@ -32,7 +32,7 @@ export class PieChartComponent implements OnInit {
         chart: {
           type: 'pieChart',
           height: 400,
-          margin : {
+          margin: {
             top: 0,
             right: 0,
             bottom: 0,
