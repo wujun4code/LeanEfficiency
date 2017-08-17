@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DefaultTeamService } from '../../team';
 import { PBDataTableComponent, PBDataTableAction } from '../../common/pb-data-table/pb-data-table.component';
 import { RxAVObject, RxAVQuery } from 'rx-lean-js-core';
 import { PBTeam, PBRoom, PBRoomFields } from '../../objects';
+
+import { AggregatedService } from '../../services';
+
 
 @Component({
   selector: 'pb-room-master',
@@ -17,21 +21,33 @@ export class RoomMasterComponent implements OnInit {
   }
   roomDisplayedColumns = ['serial'];
   roomTableTitle = 'room-table';
-  constructor(public teamService: DefaultTeamService) {
+  teamDomain: any;
+  constructor(public service: AggregatedService, public route: ActivatedRoute) {
+
 
     // this.teamService.teamChanged.flatMap(team => {
     //   return this.roomQuery(team);
     // }).subscribe(r => {
     //   this.rooms = r;
     // });
+
+    route.params.subscribe(params => {
+      this.teamDomain = params['teamDomain'];
+      console.log('route.params', this.teamDomain);
+    });
   }
   @ViewChild(PBDataTableComponent) memberTable: PBDataTableComponent;
 
   ngOnInit() {
-    this.teamService.current().flatMap(team => {
+    // this.service.team.current(this.service.auth).flatMap(team => {
+    //   return this.roomQuery(team);
+    // }).subscribe(rList => {
+    //   this.rooms = rList;
+    // });
+    this.service.team.getTeamQueryByDomain(this.teamDomain).flatMap(team => {
       return this.roomQuery(team);
-    }).subscribe(rList => {
-      this.rooms = rList;
+    }).subscribe(roomList => {
+      this.rooms = roomList;
     });
   }
 
@@ -50,14 +66,13 @@ export class RoomMasterComponent implements OnInit {
     if (this._roomTableFooterActions.length == 0) {
       let settings = new PBDataTableAction();
       settings.mdIcon = 'settings';
-      settings.mdTooltip = '列表设置';
+      settings.mdTooltip = 'table-settings';
       settings.onClick = () => {
         console.log('hehe');
       };
       this._roomTableFooterActions.push(settings);
     }
     return this._roomTableFooterActions;
-
   }
 
   direction = 'row';

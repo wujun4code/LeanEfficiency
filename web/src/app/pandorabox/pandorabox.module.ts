@@ -32,6 +32,13 @@ import { SignUpComponent } from './auth/signup/signup.component';
 import { LogInComponent } from './auth/login/login.component';
 import { LogOutComponent } from './auth/logout/logout.component';
 import { LayoutComponent, LogOutDialog } from './layout/layout.component';
+import { AuthGuard } from './auth/auth-guard.service';
+import { ErrorComponent } from './error/error/error.component';
+import { Error403Component } from './error/error-403/error-403.component';
+
+
+// console
+import { ConsoleMasterComponent } from './console/console-master/console-master.component';
 
 // dashboard
 import { DashboardMasterComponent } from './dashboard/dashboard-master/dashboard-master.component';
@@ -67,6 +74,9 @@ export const components = [
     LogOutDialog,
     LogInComponent,
     LogOutComponent,
+    ErrorComponent,
+    Error403Component,
+    ConsoleMasterComponent,
     DashboardMasterComponent,
     DashboardLayoutV1Component,
     DailyReportRealTimeTableComponent,
@@ -104,7 +114,8 @@ import { services } from './services';
         {
             provide: HighchartsStatic,
             useFactory: highchartsFactory
-        }
+        },
+        AuthGuard
     ],
     bootstrap: [PandoraBoxComponent]
 })

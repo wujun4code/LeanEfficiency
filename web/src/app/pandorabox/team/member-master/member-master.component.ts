@@ -14,6 +14,10 @@ import { MemberPropertySelectDialogComponent } from '../member-property-select-d
 import { DefaultTeamService } from '../../team';
 import { StringUtils } from '../../services/stringUtils';
 import { PBTeam, PBTeamFields, PBMemberBuiltInProperties, PBMemberKeys, PBTag, PBMember, PBTeamUser, PBTeamUserFields, PBUser } from '../../objects';
+import { ActivatedRoute } from '@angular/router';
+import { AggregatedService } from '../../services';
+import { PBDataTableComponent, PBDataTableAction } from '../../common/pb-data-table/pb-data-table.component';
+
 
 @Component({
   selector: 'pb-member-master',
@@ -40,6 +44,13 @@ export class MemberMasterComponent implements OnInit {
       selected: true
     },
   ];
+  get memberDisplayedColumns() {
+    return this.displayedColumns;
+  }
+  members: Array<any> = [];
+  get validMembers() {
+    return this.members;
+  }
 
   get allColumns() {
     return this.selectableProperties.map(c => c.name);
@@ -49,30 +60,50 @@ export class MemberMasterComponent implements OnInit {
   //   return this.selectableProperties.filter(c => c.selected).map(c => c.name);
   // }
 
-  exampleDatabase = new ExampleDatabase();
-  dataSource: ExampleDataSource | null;
-  memberSouce: PBMemberDataSource | null;
-
   memberEditDialogRef: MdDialogRef<MemberEditDialogComponent>;
   memberPropertySelectDialogRef: MdDialogRef<MemberPropertySelectDialogComponent>;
-
+  teamDomain: any;
   constructor(private router: Router,
     public dialog: MdDialog,
     public teamService: DefaultTeamService,
-    public stringService: StringUtils) {
+    public stringService: StringUtils, public service: AggregatedService, public route: ActivatedRoute) {
+
+    route.params.subscribe(params => {
+      this.teamDomain = params['teamDomain'];
+    });
 
   }
   addMemberButtonMenus: Array<any> = [];
 
 
-  @ViewChild(MdPaginator) paginator: MdPaginator;
-  @ViewChild(MdSort) sort: MdSort;
+  @ViewChild(PBDataTableComponent) memberTable: PBDataTableComponent;
+
   ngOnInit() {
-    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
-    this.memberSouce = new PBMemberDataSource(this.paginator, this.allColumns, this.sort);
+  
     this.initAddMemberButtonMenus();
+
+    this.service.team.getTeamQueryByDomain(this.teamDomain).flatMap(team => {
+      return this.memberQuery(team);
+    }).subscribe(memberList => {
+      this.members = memberList;
+    });
+
   }
 
+  memberQuery(pbTeam: PBTeam) {
+    let query = new RxAVQuery(PBTeamUserFields.className);
+    query.equalTo(PBTeamUserFields.team, pbTeam.metaData);
+    query.include(PBTeamUserFields.user);
+    return query.find().map(memberList => {
+      let db = memberList.map(member => {
+        let pbMember = new PBMember(member);
+        // let pbUser = new PBUser(member.get(PBTeamUserFields.user));
+        // pbMember.linkUser = pbUser;
+        return pbMember;
+      });
+      return db;
+    });
+  }
   initAddMemberButtonMenus() {
     this.addMemberButtonMenus.push({
       data: { role: PBMemberKeys.technician },
@@ -87,6 +118,20 @@ export class MemberMasterComponent implements OnInit {
       icon: 'person',
       text: 'add-reception',
     });
+  }
+  memberTableTitle = 'room-table';
+  _memberTableFooterActions = [];
+  get memberTableFooterActions() {
+    if (this._memberTableFooterActions.length == 0) {
+      let settings = new PBDataTableAction();
+      settings.mdIcon = 'settings';
+      settings.mdTooltip = 'table-settings';
+      settings.onClick = () => {
+        console.log('hehe');
+      };
+      this._memberTableFooterActions.push(settings);
+    }
+    return this._memberTableFooterActions;
   }
 
   openDialog(data: any) {
@@ -114,7 +159,6 @@ export class MemberMasterComponent implements OnInit {
       this.memberPropertySelectDialogRef = null;
       if (result.cancel == false) {
         let _displayedColumns = this.selectableProperties.filter(c => c.selected).map(c => c.name);
-        this.memberSouce = new PBMemberDataSource(this.paginator, _displayedColumns, this.sort);
       }
     });
   }
@@ -124,166 +168,4 @@ export class PBMenuButton {
   icon: string;
   text: string;
   action: Function;
-}
-/** Constants used to fill up our data base. */
-const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** An example database that the data source uses to retrieve data for the table. */
-export class ExampleDatabase {
-  /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
-  get data(): UserData[] { return this.dataChange.value; }
-
-  constructor() {
-    // Fill up the database with 100 users.
-    for (let i = 0; i < 100; i++) { this.addUser(); }
-  }
-
-  /** Adds a new user to the database. */
-  addUser() {
-    const copiedData = this.data.slice();
-    copiedData.push(this.createNewUser());
-    this.dataChange.next(copiedData);
-  }
-
-  /** Builds and returns a new User. */
-  private createNewUser() {
-    const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-    return {
-      id: (this.data.length + 1).toString(),
-      name: name,
-      progress: Math.round(Math.random() * 100).toString(),
-      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-    };
-  }
-}
-/**
- * Data source to provide what data should be rendered in the table. Note that the data source
- * can retrieve its data in any way. In this case, the data source is provided a reference
- * to a common data base, ExampleDatabase. It is not the data source's responsibility to manage
- * the underlying data. Instead, it only needs to take the data and send the table exactly what
- * should be rendered.
- */
-export class ExampleDataSource extends DataSource<any> {
-  _filterChange = new BehaviorSubject('');
-  get filter(): string { return this._filterChange.value; }
-  set filter(filter: string) { this._filterChange.next(filter); }
-
-
-  constructor(private _exampleDatabase: ExampleDatabase, private _paginator: MdPaginator, public _sort: MdSort) {
-    super();
-    this._paginator._intl.itemsPerPageLabel = '每页显示:';
-    this._paginator._intl.nextPageLabel = '下一页';
-    this._paginator._intl.previousPageLabel = '上一页';
-  }
-
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<UserData[]> {
-    const displayDataChanges = [
-      this._exampleDatabase.dataChange,
-      this._paginator.page,
-    ];
-
-    return Observable.merge(...displayDataChanges).map(() => {
-      const data = this._exampleDatabase.data.slice();
-
-      // Grab the page's slice of data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    });
-  }
-
-  disconnect() { }
-}
-
-export class PBMemberDataSource extends DataSource<any>{
-
-  constructor(private _paginator: MdPaginator, public displayedColumns: Array<string>, public _sort: MdSort) {
-    super();
-    this._paginator._intl.itemsPerPageLabel = '每页显示:';
-    this._paginator._intl.nextPageLabel = '下一页';
-    this._paginator._intl.previousPageLabel = '上一页';
-    this.load().subscribe(inited => {
-
-    });
-  }
-  load() {
-    let query = new RxAVQuery(PBTeamUserFields.className);
-    let teamObj = RxAVObject.createWithoutData(PBTeamFields.className, '598a7b6f570c350069a1c0f4');
-    query.equalTo(PBTeamUserFields.team, teamObj);
-    query.include(PBTeamUserFields.user);
-    return query.find().map(memberList => {
-      let db = memberList.map(member => {
-        let pbMember = new PBMember(member);
-        // let pbUser = new PBUser(member.get(PBTeamUserFields.user));
-        // pbMember.linkUser = pbUser;
-        return pbMember;
-      });
-      this.dataChange.next(db);
-      return db;
-    });
-  }
-  dataChange: BehaviorSubject<Array<PBMember>> = new BehaviorSubject<Array<PBMember>>([]);
-  get data(): Array<PBMember> { return this.dataChange.value; }
-  connect(collectionViewer: CollectionViewer): Observable<any[]> {
-    const displayDataChanges = [
-      this.dataChange,
-      this._paginator.page,
-      this._sort.mdSortChange,
-    ];
-
-    return Observable.merge(...displayDataChanges).map(() => {
-      const data = this.getSortedData();
-
-      // Grab the page's slice of data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    });
-  }
-  disconnect(collectionViewer: CollectionViewer): void {
-
-  }
-  grab(str: string) {
-    let r = str.match(/\d+/);
-    if (r != null) {
-      if (r.length > 0) {
-        return r[0];
-      }
-    }
-    return str;
-  }
-  getSortedData() {
-    const data = this.data.slice();
-    if (!this._sort.active || this._sort.direction == '') { return data; }
-    return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
-
-      switch (this._sort.active) {
-        case 'serial': [propertyA, propertyB] = [this.grab(a.serial), this.grab(b.serial)]; break;
-        case 'nickName': [propertyA, propertyB] = [a.nickName, b.nickName]; break;
-        case 'mobile': [propertyA, propertyB] = [this.grab(a.mobile), this.grab(b.mobile)]; break;
-        case 'weixin': [propertyA, propertyB] = [a.weixin, b.weixin]; break;
-      }
-
-      let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
-
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
-    });
-  }
 }

@@ -38,6 +38,10 @@ export class PBTeam extends PBObject {
         return `${this.domain}_boss`;
     }
 
+    get upatedAt() {
+        return this.metaData.updatedAt;
+    }
+
     get teamACL() {
         let teamACL = new RxAVACL();
         teamACL.setPublicReadAccess(false);

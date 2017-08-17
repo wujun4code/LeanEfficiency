@@ -23,7 +23,8 @@
     "smsCode": "短信验证码",
     "username": "用户名",
     "password": "密码",
-    "dashboard": "控制台",
+    "dashboard": "营业状态",
+    "trending":"实时数据",
     "email": "邮箱",
     "email-optional": "邮箱(可选)",
     "password-confirm": "确认密码",
@@ -90,5 +91,7 @@
     "paidWay":"支付方式",
     "switch-team":"切换团队",
     "switch-team-title":"选择您要进入的团队/分店",
-    "room-table":"房态列表"
+    "room-table":"房态列表",
+    "console":"控制台",
+    "table-settings":"列表设置"
 }

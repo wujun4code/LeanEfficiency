@@ -10,6 +10,11 @@ import { LogInComponent } from './auth/login/login.component';
 import { LogOutComponent } from './auth/logout/logout.component';
 import { PandoraBoxComponent } from './pandorabox.component'
 import { LayoutComponent } from './layout/layout.component';
+import { AuthGuard } from './auth/auth-guard.service';
+import { ErrorComponent } from './error/error/error.component';
+
+// console
+import { ConsoleMasterComponent } from './console/console-master/console-master.component';
 
 // dashboard
 import { DashboardMasterComponent } from './dashboard/dashboard-master/dashboard-master.component';
@@ -39,7 +44,13 @@ const routes: Routes = [
         component: LogInComponent
     },
     {
+        path: 'error/:code',
+        component: ErrorComponent
+    },
+    {
         path: 'pandorabox',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
         component: LayoutComponent,
         children: [
             {
@@ -48,26 +59,26 @@ const routes: Routes = [
                 redirectTo: 'login',
             },
             {
-                path: 'login',
-                component: LogInComponent
-            },
-            {
                 path: 'logout',
                 component: LogOutComponent
             },
             {
-                path: 'dashboard',
+                path: 'console/:teamDomain',
+                component: ConsoleMasterComponent
+            },
+            {
+                path: 'dashboard/:teamDomain',
                 component: DashboardMasterComponent
             },
             {
-                path: 'room',
+                path: 'room/:teamDomain',
                 component: RoomMasterComponent
             },
             {
-                path: 'ticket',
+                path: 'ticket/:teamDomain',
                 component: TicketMasterComponent
             }, {
-                path: 'staff',
+                path: 'staff/:teamDomain',
                 component: MemberMasterComponent
             }
         ]

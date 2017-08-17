@@ -16,7 +16,7 @@ export class TeamSwitchDialogComponent implements OnInit {
     public dialogRef: MdDialogRef<TeamSwitchDialogComponent>,
     public teamService: DefaultTeamService,
     public userService: DefaultAuthService) {
-
+       
   }
 
   get teams() {
