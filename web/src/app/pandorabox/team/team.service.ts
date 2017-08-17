@@ -8,7 +8,7 @@ import { DefaultAuthService } from '../auth/auth.service';
 @Injectable()
 export class DefaultTeamService {
 
-    constructor(public userService: DefaultAuthService) {
+    constructor() {
         // this.userService.currentUser().flatMap(user => {
         //     return this.loadTeams(user);
         // }).subscribe(userTeamsLoaded => {
@@ -16,29 +16,40 @@ export class DefaultTeamService {
         //     this.teamChanged = new BehaviorSubject<PBTeam>(this._team);
         // });
     }
-
     teamChanged: BehaviorSubject<PBTeam>;
 
     _teams: Array<PBTeam> = [];
-    _team: PBTeam;
+    currentTeam: PBTeam;
 
-    current() {
-        return this.userService.currentUser().flatMap(user => {
-            return this.loadTeams(user);
-        }).map(userTeamsLoaded => {
-            this._team = userTeamsLoaded[0];
-            this.teamChanged = new BehaviorSubject<PBTeam>(this._team);
-            return this._team;
+    initBy(user: PBUser) {
+        return this.getTeamQuery(user).map(teams => {
+            this._teams = teams;
+            this.teamChanged = new BehaviorSubject<PBTeam>(this.defaultTeam);
+            return this._teams;
         });
     }
 
-    get validTeams() {
-        return this._teams;
+    get defaultTeam() {
+        let sorted = this._teams.sort((a, b) => {
+            return a.upatedAt.getTime() - b.upatedAt.getTime();
+        });
+        return sorted[0];
     }
 
 
-    loadCurrentTeams() {
 
+    // current(userService: DefaultAuthService) {
+    //     return userService.currentUser().flatMap(user => {
+    //         return this.loadTeams(user);
+    //     }).map(userTeamsLoaded => {
+    //         this.currentTeam = userTeamsLoaded[0];
+    //         this.teamChanged = new BehaviorSubject<PBTeam>(this.currentTeam);
+    //         return this.currentTeam;
+    //     });
+    // }
+
+    get validTeams() {
+        return this._teams;
     }
 
     loadTeams(user: PBUser) {
@@ -57,6 +68,14 @@ export class DefaultTeamService {
                 let teamObj = member.get(PBTeamUserFields.team);
                 return new PBTeam(teamObj);
             });
+        });
+    }
+
+    getTeamQueryByDomain(teamDomain: any) {
+        let teamQuery = new RxAVQuery(PBTeamFields.className);
+        teamQuery.equalTo(PBTeamFields.domain, teamDomain);
+        return teamQuery.find().map(teamList => {
+            return new PBTeam(teamList[0]);
         });
     }
 

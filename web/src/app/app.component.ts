@@ -21,7 +21,7 @@ export class AppComponent {
       console.log('locale', locale);
       this.translate.use(locale);
     } else {
-      this.translate.use('en'); // Set your language here
+      this.translate.use('zh-cn'); // Set your language here
     }
   }
 }

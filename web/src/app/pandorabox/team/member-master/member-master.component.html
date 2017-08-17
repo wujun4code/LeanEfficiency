@@ -25,37 +25,6 @@
     </md-card>
   </div>
   <div fxFlex="78" fxFill>
-    <md-card>
-      <md-card-title> {{ 'team-member-list' | translate }}</md-card-title>
-      <md-card-content>
-        <div>
-          <md-table #table [dataSource]="memberSouce" mdSort>
-            
-            <ng-container *ngFor="let column of memberSouce.displayedColumns" cdkColumnDef="{{column}}">
-              <md-header-cell *cdkHeaderCellDef md-sort-header>{{ column | translate }} </md-header-cell>
-              <md-cell *cdkCellDef="let row"> {{row.getValue(column)}} </md-cell>
-            </ng-container>
-
-            <md-header-row *cdkHeaderRowDef="memberSouce.displayedColumns"></md-header-row>
-            <md-row *cdkRowDef="let row; columns: memberSouce.displayedColumns;"></md-row>
-          </md-table>
-
-          <div fxLayout="row" fxLayoutAlign="space-between center">
-            <button md-icon-button mdTooltip="列表设置" (click)="openPropertyViewSelectDialog('member-property')"><md-icon>settings</md-icon></button>
-            <md-paginator #paginator [length]="memberSouce.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10]"></md-paginator>
-          </div>
-
-        </div>
-      </md-card-content>
-      <!-- <md-card-actions>
-        <div fxLayout="row">
-
-           <button md-icon-button><md-icon>favorite</md-icon></button>
-          <span fxFlex></span>
-          <button md-button>More Info</button>
-          <button md-button>Save as</button> 
-        </div>
-      </md-card-actions> -->
-    </md-card>
+      <pb-data-table fxFill #memberTable [displayedColumns]="memberDisplayedColumns" [data]="validMembers" [footerActions]="memberTableFooterActions" [title]="memberTableTitle"></pb-data-table>
   </div>
 </div>

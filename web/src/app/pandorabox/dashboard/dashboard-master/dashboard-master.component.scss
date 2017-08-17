@@ -365,11 +365,11 @@ md-card-content pre {
     margin-bottom: 6px;
 }
 
-.dashboar-ticket-panel {
+.dashboard-ticket-panel {
     margin-top: 1em;
 }
 
-.dashboar-revenue-panel {
-    @extend .dashboar-ticket-panel;
+.dashboard-revenue-panel {
+    @extend .dashboard-ticket-panel;
     margin-right: 1em;
 }

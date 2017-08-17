@@ -24,10 +24,11 @@ export class SidenavService {
 
     // PandroraBox 
 
-    let pbDashboard = menu.addItem('dashboard', 'dashboard', '/pandorabox/dashboard', 1);
-    let pbRoom = menu.addItem('room', 'home', '/pandorabox/room', 2);
-    let pbTicket = menu.addItem('ticket', 'assignment', '/pandorabox/ticket', 3);
-    let pbMember = menu.addItem('staff', 'person', '/pandorabox/staff', 4);
+    // let pbConsole = menu.addItem('console', 'business', '/pandorabox/console', 1);
+    // let pbDashboard = menu.addItem('dashboard', 'dashboard', '/pandorabox/dashboard', 1);
+    // let pbRoom = menu.addItem('room', 'home', '/pandorabox/room', 2);
+    // let pbTicket = menu.addItem('ticket', 'assignment', '/pandorabox/ticket', 3);
+    // let pbMember = menu.addItem('staff', 'person', '/pandorabox/staff', 4);
     //let pbSystem = menu.addItem('logOut', 'power_settings_new', '/pandorabox/logout', 4);
     //let dashboard = menu.addItem('Dashboard', 'dashboard', '/', 3);
 
@@ -134,6 +135,11 @@ export class SidenavService {
       this._items.splice(index, 1);
     }
 
+    this._itemsSubject.next(this._items);
+  }
+
+  clearItems() {
+    this._items = [];
     this._itemsSubject.next(this._items);
   }
 

@@ -12,8 +12,8 @@
     </md-dialog-content>
     
     <md-dialog-actions align="end" fxFill fxFlex="100">
-      <button md-button (click)="dialogRef.close('No!')">{{ 'btnCancel' | translate }}</button>
-      <button md-button color="warn" (click)="logout()">{{ 'btnConfirm' | translate }}</button>
+      <button md-button (click)="cancel()">{{ 'btnCancel' | translate }}</button>
+      <button md-button color="primary" (click)="done()">{{ 'btnConfirm' | translate }}</button>
     </md-dialog-actions>
     
 </div>
