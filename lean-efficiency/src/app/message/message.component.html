@@ -1,0 +1,69 @@
+<app-partial-top-nav></app-partial-top-nav>
+
+<!-- message window -->
+<div class="wechat-content" *ngIf="isWechatMode">
+    <!-- wechat left nav bar -->
+    <div class="wechat-left-nav-bar">
+        <div class="wechat-search-box">
+            <mat-form-field>
+                <input matInput placeholder="{{ 'search-chat' | translate}} ">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            <button mat-icon-button color="primary">
+                <mat-icon aria-label="">add</mat-icon>
+            </button>
+        </div>
+        <!-- wechat list -->
+        <div class="wechat-list">
+            <div class="wechat-list-item">
+                <img src="assets/img/android.png" />
+                <div class="wechat-list-item-message">
+                    <p class="wechat-title">Unity3D</p>
+                    <p class="message-summary">江宏: 要不还是重新发布一下吧。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wechat-box">
+    </div>
+</div>
+
+<div class="slack-content">
+    <div class="slack-left-nav-bar" *ngIf="isSlackMode">
+        <div class="slack-search-box">
+            <mat-form-field>
+                <input matInput placeholder="{{ 'search-chat' | translate}} ">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            <button mat-icon-button color="primary">
+                <mat-icon aria-label="">add</mat-icon>
+            </button>
+        </div>
+        <ul>
+            <li class="channel-hex-name" *ngFor="let chat of chats" [ngClass]="{'slack-chat-selected' : selected(chat)}" (click)="doSelect(chat)">
+                <img [src]="chat.avatar" />
+                <a class="group-channel" *ngIf="isChannel(chat)">{{chat.name}}</a>
+                <a *ngIf="isDirect(chat)">{{chat.name}}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="slack-box">
+        <div class="slack-box-message-list">
+            <div class="slack-message-item" *ngFor="let message of onMessage | async">
+                <img class="slack-message-avatar" [src]="getMessageAvatar(message)" />
+                <div class="slack-message-group">
+                    <div class="slack-message-sender">
+                        {{ message.senderName }}
+                    </div>
+                    <div class="slack-message-content">
+                        <div> {{ message.content }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-partial-message-input-box>
+
+        </app-partial-message-input-box>
+    </div>
+</div>

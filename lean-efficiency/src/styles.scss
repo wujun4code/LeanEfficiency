@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/material/theming';
+@include mat-core();
+@import './app/app-theme';
+// Define the light theme.
+$primary: mat-palette($mat-indigo);
+$accent : mat-palette($mat-pink, A200, A100, A400);
+$warn : mat-palette($mat-red);
+$theme: mat-light-theme($primary, $accent, $warn);
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #47525E;
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@include app-theme($theme);
+@include angular-material-theme($theme);

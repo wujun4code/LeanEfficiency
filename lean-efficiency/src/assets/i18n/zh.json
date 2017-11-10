@@ -1,0 +1,13 @@
+{
+    "sign-up": "注册",
+    "log-in": "登录",
+    "log-out": "退出",
+    "task": "任务",
+    "leave": "请假",
+    "notification": "通知",
+    "message": "消息",
+    "settings": "设置",
+    "profile": "个人信息",
+    "search": "搜索",
+    "search-chat":"搜索聊天/历史消息"
+}

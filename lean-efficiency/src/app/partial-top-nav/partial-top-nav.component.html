@@ -1,0 +1,43 @@
+<nav class="le-nav-bar">
+  <a mat-button aria-label="LeanEfficiency">
+    <img class="logo" src="../../assets/img/LeanCloud-Avatar.svg" alt="LeanEfficiency">
+    <span>LeanEfficiency</span>
+  </a>
+  <div>
+    <a mat-button *ngIf="!loggedIn">
+      <span> {{ 'sign-up' | translate }}</span>
+    </a>
+    <a mat-button *ngIf="!loggedIn">
+      <span> {{ 'log-in' | translate }}</span>
+    </a>
+    <a mat-button *ngIf="loggedIn">
+      <span> {{ 'message' | translate }}</span>
+    </a>
+    <a mat-button *ngIf="loggedIn">
+      <span> {{ 'task' | translate }}</span>
+    </a>
+    <a mat-button *ngIf="loggedIn">
+      <span> {{ 'leave' | translate }}</span>
+    </a>
+    <a mat-button *ngIf="loggedIn">
+      <span> {{ 'notification' | translate }}</span>
+    </a>
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="loggedIn">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>{{ 'settings' | translate }}</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ 'profile' | translate }}</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>exit_to_app</mat-icon>
+        <span>{{ 'log-out' | translate }}</span>
+      </button>
+    </mat-menu>
+  </div>
+</nav>
