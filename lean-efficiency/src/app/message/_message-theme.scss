@@ -1,0 +1,23 @@
+@mixin message-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    app-message {
+        color: mat-color($primary, default-contrast);
+        .slack-left-nav-bar {
+            //background: mat-color($primary);
+        }
+        .channel-hex-name:hover {
+            color: mat-color($primary);
+        }
+        .slack-chat-selected:hover {
+            color: #ffffff;
+        }
+        .slack-message-sender:hover {
+            color: mat-color($primary);
+            cursor: pointer;
+        }
+    }
+}
