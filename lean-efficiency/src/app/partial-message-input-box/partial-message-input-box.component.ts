@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output, Input } from '@angular/core';
+import { IUIChatModelListItemModel } from '../models';
 
 @Component({
   selector: 'app-partial-message-input-box',
@@ -7,10 +8,23 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class PartialMessageInputBoxComponent implements OnInit {
+  @Input()
+  chat: IUIChatModelListItemModel;
 
+  content: any;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onEnter(event) {
+
+    let value = event.target.value;
+    console.log('value', value);
+  }
+
+  send() {
+    
   }
 
 }

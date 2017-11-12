@@ -9,5 +9,6 @@
     "settings": "设置",
     "profile": "个人信息",
     "search": "搜索",
-    "search-chat":"搜索聊天/历史消息"
+    "search-chat":"搜索聊天/历史消息",
+    "say-something":"说点什么..."
 }

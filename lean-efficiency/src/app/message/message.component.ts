@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 import { MessageService, UserService } from '../services'
 import { IUIChatModelListItemModel, ChatCategory, MessageModel } from '../models';
 import { Observable } from 'rxjs';
@@ -20,11 +21,25 @@ export class MessageComponent implements OnInit {
 
   _layoutMode: LayoutMode = LayoutMode.Wechat;
 
-  constructor(public messageService: MessageService, public userService: UserService) {
+  constructor(public route: ActivatedRoute,
+    public messageService: MessageService,
+    public userService: UserService) {
+
     this.chats = this.messageService.chats;
-    if (this.chats.length > 0) {
-      this.doSelect(this.chats[0])
-    }
+
+    route.params.subscribe(params => {
+      console.log(params);
+      let hexName = params['hexName'];
+      let chat = this.messageService.findChat(hexName);
+      if (chat) {
+        console.log('chat', chat);
+        this.doSelect(chat);
+      } else {
+        if (this.chats.length > 0) {
+          this.doSelect(this.chats[0]);
+        }
+      }
+    });
   }
 
   ngOnInit() {
@@ -71,5 +86,8 @@ export class MessageComponent implements OnInit {
     return user ? user.avatar : no_avatar;
   }
 
+  send() {
+
+  }
 
 }
