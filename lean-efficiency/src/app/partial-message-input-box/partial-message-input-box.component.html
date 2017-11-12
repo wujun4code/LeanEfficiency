@@ -1,8 +1,6 @@
 <div class="message-input-box">
   <div class="message-tool-bar"></div>
-  <div>
-    <textarea>
-      
-    </textarea>
+  <div class="message-text-input-box">
+    <textarea class="text-input" placeholder="{{ 'say-something' | translate}}" (keyup.enter)="onEnter($event)" ></textarea>
   </div>
 </div>

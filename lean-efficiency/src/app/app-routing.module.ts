@@ -11,6 +11,9 @@ const routes: Routes = [
   }, {
     path: 'message',
     component: MessageComponent
+  }, {
+    path: 'message/:hexName',
+    component: MessageComponent
   }];
 
 @NgModule({

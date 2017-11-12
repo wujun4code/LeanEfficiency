@@ -20,7 +20,8 @@ export class UserService {
         junwu.email = 'jun.wu@leancloud.rocks';
         junwu.id = 'xxx';
         junwu.mobile = '18612438929';
-        junwu.usernameHex = 'junwu';
+        junwu.hexUserId = 'junwu';
+        junwu.textName = '吴骏';
         return junwu;
     }
 
@@ -33,16 +34,18 @@ export class UserService {
         wchen.clientId = 'wchen';
         wchen.email = 'wchen@leancloud.rocks';
         wchen.id = '111';
-        wchen.usernameHex = 'wchen';
+        wchen.hexUserId = 'wchen';
         wchen.mobile = '15658580412';
+        wchen.textName = '陈伟';
 
         let hjiang = new UserModel();
         hjiang.avatar = 'assets/img/hjiang.png';
         hjiang.clientId = 'hjiang';
         hjiang.email = 'hjiang@leancloud.rocks';
         hjiang.id = '222';
-        hjiang.usernameHex = 'hjiang';
+        hjiang.hexUserId = 'hjiang';
         hjiang.mobile = '13812345678';
+        hjiang.textName = '江宏';
 
         let ttang = new UserModel();
         ttang.avatar = 'assets/img/ttang.png';
@@ -50,7 +53,8 @@ export class UserService {
         ttang.email = 'ttang@leancloud.rocks';
         ttang.id = '333';
         ttang.mobile = '18888888888';
-        ttang.usernameHex = 'ttang';
+        ttang.hexUserId = 'ttang';
+        ttang.textName = '唐天勇';
 
         this._mockContacts.push(current, wchen, hjiang, ttang);
     }
@@ -60,7 +64,6 @@ export class UserService {
     }
 
     contact(userId: string) {
-        console.log('userId', userId, this.mockContacts);
-        return this.mockContacts.find(user => user.id == userId || user.usernameHex == userId);
+        return this.mockContacts.find(user => user.id == userId || user.hexUserId == userId || user.clientId == userId);
     }
 }

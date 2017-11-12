@@ -2,11 +2,22 @@ $slack-left-bar-bgc: #212121;
 $fixed-margin:1em;
 $hover-bgc:#757575;
 $content-text-color: rgb(84, 87, 99);
+
+// ::-webkit-scrollbar {
+//     -webkit-appearance:slider-vertical;
+//     //width: 7px;
+// }
+// ::-webkit-scrollbar-thumb {
+//     border-radius: 4px;
+//     background-color: rgba(0,0,0,.5);
+//     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+//     box-shadow: 0 0 1px rgba(255,255,255,.5);
+// }
 // layout common
 .slack-content,
 .wechat-content {
     display: flex;
-    max-height: 95vh;
+    width: 100%;
 }
 
 //wechat layout
@@ -15,7 +26,6 @@ $content-text-color: rgb(84, 87, 99);
     flex-direction: column;
     width: 20%;
     border: 1px solid rgba(71, 82, 94, 0.2);
-    overflow-y: scroll;
     overflow-x: hidden;
 }
 
@@ -67,24 +77,26 @@ $content-text-color: rgb(84, 87, 99);
 }
 
 //slack layout
-.slack-content {
-    width: 100%;
-}
-
 .slack-left-nav-bar {
-    width: 20%;
-    position: relative;
-    color: rgba(0, 0, 0, .54);
+    width: 15em;
+    color: rgba(0, 0, 0, .5);
+    //overflow-y: scroll;
+    align-content: stretch;
+    display: flex;
+}
+
+.channel-left-bar-list{
+    align-content:stretch;
+    align-items:stretch;
+    width: 100%;
     overflow-y: scroll;
-    overflow-x: hidden;
 }
-
 .channel-hex-name {
-    margin: 0.5em 3em 0.5em 1em;
-}
-
-.channel-hex-name {
+    display: flex;
+    padding:0 2em 0 1em;
+    margin: 0 0.4em;
     font-size: 1em;
+    align-items: center;
 }
 
 .channel-hex-name>img {
@@ -93,7 +105,7 @@ $content-text-color: rgb(84, 87, 99);
     vertical-align: middle;
 }
 
-.channel-hex-name>a.group-channel:before {
+.channel-hex-name>span.group-channel:before {
     content: '#';
 }
 
@@ -101,24 +113,37 @@ $content-text-color: rgb(84, 87, 99);
     cursor: pointer;
 }
 
-.slack-left-nav-bar>ul {
-    list-style-type: none;
-}
-
-.slack-chat-selected {
-    background-color: rgba(0, 0, 0, .5);
-    color: #ffffff;
-}
-
 .slack-box {
-    background-color: #f1f1f1;
-    flex-basis: 80%;
     display: flex;
     flex-direction: column;
+    flex: 1; // border-left: 2px solid #f1f1f1;
 }
-.slack-box-message-list{
+
+.slack-box-conversation-title {
+    width: 100%;
+    min-height: 5em;
+    display: flex;
+}
+
+.slack-box-conversation-title-text {
+    display: flex;
+    align-items: center;
+    // color: $content-text-color;
+    font-weight: 700;
+    margin-left: $fixed-margin;
+}
+
+a.slack-box-conversation-title-text {
+    margin-left: $fixed-margin;
+}
+
+img.slack-box-message-title-avatar {
+    height: 3em;
+}
+
+.channel-left-bar-list,
+.slack-box-message-list {
     overflow-y: scroll;
-    position: relative;
 }
 
 .slack-message-item {
@@ -127,7 +152,7 @@ $content-text-color: rgb(84, 87, 99);
     display: flex;
 }
 
-.slack-message-item>img.slack-message-avatar {
+img.slack-message-avatar {
     height: 2em;
     margin-left: 1em;
 }
@@ -164,3 +189,5 @@ $content-text-color: rgb(84, 87, 99);
     transform: translateX(-50%);
     transition: border-bottom-color .5s linear;
 }
+
+.slack-message-input-box {}

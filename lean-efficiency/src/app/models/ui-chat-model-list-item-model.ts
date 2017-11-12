@@ -1,9 +1,12 @@
+import { Observable } from 'rxjs';
+
 export interface IUIChatModelListItemModel {
     avatar: string;
     lastMessageSummary: string;
     name: string;
     category: ChatCategory;
-    id: string;
+    id: string
+    subUrl: string;
 }
 
 export enum ChatCategory {

@@ -1,4 +1,42 @@
-.message-input-box{
-    position: relative;
+.message-input-box {
     background-color: #ffffff;
+    width: 100%;
+    height: 10em;
+    display: flex;
+}
+
+.message-text-input-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+textarea.text-input {
+    background: 0 0;
+    border: 1px;
+    border-radius: 0;
+    box-shadow: none;
+    resize: none;
+    font-size: 1em;
+    overflow: hidden;
+    word-wrap: break-word;
+    resize: none;
+    margin: 2em;
+    line-height: 1.5em;
+}
+
+textarea:hover,
+input:hover,
+textarea:active,
+input:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active {
+    outline: 0px !important;
+    -webkit-appearance: none;
 }

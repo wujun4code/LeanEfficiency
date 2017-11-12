@@ -5,8 +5,8 @@
 @import './app/app-theme';
 // Define the light theme.
 $primary: mat-palette($mat-indigo);
-$accent : mat-palette($mat-pink, A200, A100, A400);
-$warn : mat-palette($mat-red);
+$accent: mat-palette($mat-amber);
+$warn: mat-palette($mat-red);
 $theme: mat-light-theme($primary, $accent, $warn);
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -21,5 +21,38 @@ body {
     padding: 0;
 }
 
+a,
+a:link,
+a:visited,
+a:focus,
+a:hover,
+a:active {
+    text-decoration: none;
+}
+
+.app-top-nav {
+    width: 100%;
+}
+
+.main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+a {
+    cursor: pointer;
+}
+
+.app-content {
+    display: flex;
+    flex-basis: 100%;
+}
+
 @include app-theme($theme);
+$c1:mat-palette($mat-blue-grey, 200);
+$c2:mat-palette($mat-grey, 900);
+$c3:mat-palette($mat-blue-grey, 200);
+@include app-colors($c1, $c2, $c3);
 @include angular-material-theme($theme);

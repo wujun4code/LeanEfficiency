@@ -4,20 +4,59 @@
     $warn: map-get($theme, warn);
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
+    $slected: mat-color($accent);
     app-message {
         color: mat-color($primary, default-contrast);
         .slack-left-nav-bar {
-            //background: mat-color($primary);
+            background: mat-color($background, background);
+            border-right: 1px solid mat-color($foreground, divider);
         }
         .channel-hex-name:hover {
-            color: mat-color($primary);
+            // background-color: $slected;
+            //color: mat-color($primary, default-contrast);
         }
-        .slack-chat-selected:hover {
-            color: #ffffff;
+        .slack-chat-selected {
+            //background-color: rgba(0, 0, 0, .05);
+            // background-color: $slected;
+            // span {
+            //     color: mat-color($primary, default-contrast);
+            // }
         }
+        .slack-box-conversation-title {
+            //background-color: $slected;
+            color: mat-color($foreground, secondary-text);
+            border-bottom: 1px solid mat-color($foreground, divider);
+        }
+        .channel-hex-name {
+            color: mat-color($foreground, secondary-text);
+        } // .slack-chat-selected:hover {
+        //     color: #ffffff;
+        // }
         .slack-message-sender:hover {
             color: mat-color($primary);
             cursor: pointer;
+        }
+        .slack-box {
+            //background: mat-color($background, background);
+            background: #eeeeee;
+        }
+        .slack-message-input-box {
+            border-top: 1px solid mat-color($foreground, divider);
+        }
+    }
+}
+
+@mixin message-tags($hoverColor,$selectedColor,$selectedBgc) {
+    app-message {
+        .slack-box-conversation-title {
+            // color: mat-color($primary, default-contrast);
+        }
+        .channel-hex-name:hover {
+            background: rgba(0,0,0,0.025);;
+        }
+        .slack-chat-selected {
+            color: mat-color($selectedColor);
+            background:rgba(0,0,0,0.05);
         }
     }
 }
