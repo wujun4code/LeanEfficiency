@@ -1,10 +1,10 @@
 <nav class="le-nav-bar">
   <a mat-button aria-label="LeanEfficiency">
     <img class="logo" src="../../assets/img/LeanCloud-Avatar.svg" alt="LeanEfficiency">
-    <span>LeanEfficiency</span>
+    <span>WorkChat</span>
   </a>
   <div>
-    <a mat-button *ngIf="!loggedIn">
+    <!-- <a mat-button *ngIf="!loggedIn">
       <span> {{ 'sign-up' | translate }}</span>
     </a>
     <a mat-button *ngIf="!loggedIn">
@@ -21,7 +21,7 @@
     </a>
     <a mat-button *ngIf="loggedIn">
       <span> {{ 'notification' | translate }}</span>
-    </a>
+    </a> -->
     <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="loggedIn">
       <mat-icon>more_vert</mat-icon>
     </button>

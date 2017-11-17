@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "dist",
+      "outDir": "leanengine/dist",
       "assets": [
         "assets",
         "favicon.ico"

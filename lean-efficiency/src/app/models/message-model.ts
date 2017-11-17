@@ -4,4 +4,5 @@ export class MessageModel {
     senderName: string;
     summary: string;
     content: any;
+    timestamp: number;
 }

@@ -6,7 +6,7 @@ export interface IUIChatModelListItemModel {
     name: string;
     category: ChatCategory;
     id: string
-    subUrl: string;
+    hexName: string;
 }
 
 export enum ChatCategory {

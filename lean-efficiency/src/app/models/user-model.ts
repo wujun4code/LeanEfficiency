@@ -1,5 +1,11 @@
+import { RxAVUser } from 'rx-lean-js-core';
+import { BaseModel } from './base-model';
 
-export class UserModel {
+export class UserModel extends BaseModel {
+    constructor() {
+        let user = new RxAVUser();
+        super(user);
+    }
     /**
      * _User 的 objectId
      * 
@@ -7,6 +13,8 @@ export class UserModel {
      * @memberof UserModel
      */
     id: string;
+
+    metaData: RxAVUser;
 
     /**
      * 在整个聊天系统里面的 client id，为什么要区别与 id 呢？因为这个值可能会是 id 也可能是用户自己输入的全系统唯一的用户名，谁知道呢？
@@ -30,7 +38,7 @@ export class UserModel {
      * @type {string}
      * @memberof UserModel
      */
-    username:string;
+    username: string;
 
     /**
      * 用户给自己标记的昵称，类似于 QQ 昵称
@@ -38,9 +46,27 @@ export class UserModel {
      * @type {string}
      * @memberof UserModel
      */
-    textName:string;
+    nickName: string;
 
     email: string;
     mobile: string;
     avatar: string;
+
+    restoreFromAVUser(userMetaData: RxAVUser) {
+        this.metaData = userMetaData;
+        this.id = userMetaData.objectId;
+        this.nickName = userMetaData.get(UserFields.keys.nickName);
+        this.email = userMetaData.email;
+        this.mobile = userMetaData.mobilephone;
+        this.username = userMetaData.username;
+        this.hexUserId = userMetaData.get(UserFields.keys.hexName);
+    }
 }
+
+export const UserFields = {
+    className: '_User',
+    keys: {
+        nickName: 'nickName',
+        hexName: 'hexName'
+    }
+};

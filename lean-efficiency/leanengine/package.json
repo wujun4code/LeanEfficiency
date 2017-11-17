@@ -1,0 +1,12 @@
+{
+  "name": "static-getting-started",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.12.3",
+    "leancloud-storage": "^3.4.0",
+    "leanengine": "^3.0.2"
+  },
+  "engines": {
+    "node": "6.x"
+  }
+}

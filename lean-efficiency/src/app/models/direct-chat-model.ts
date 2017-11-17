@@ -19,10 +19,10 @@ export class DirectChatModel implements IUIChatModelListItemModel {
 
     }
 
-    set subUrl(value: string) {
+    set hexName(value: string) {
 
     }
-    get subUrl() {
+    get hexName() {
         return '@' + this.hexPeerId;
     }
 

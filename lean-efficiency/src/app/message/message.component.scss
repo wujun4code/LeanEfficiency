@@ -117,6 +117,7 @@ $content-text-color: rgb(84, 87, 99);
     display: flex;
     flex-direction: column;
     flex: 1; // border-left: 2px solid #f1f1f1;
+    justify-content: space-between;
 }
 
 .slack-box-conversation-title {
@@ -144,6 +145,9 @@ img.slack-box-message-title-avatar {
 .channel-left-bar-list,
 .slack-box-message-list {
     overflow-y: scroll;
+}
+.slack-box-message-list{
+    flex-basis: 100%;
 }
 
 .slack-message-item {

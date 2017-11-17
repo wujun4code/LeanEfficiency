@@ -48,7 +48,7 @@
                     </button>
                 </div> -->
                 <div class="channel-left-bar-list">
-                    <a [routerLink]="['/message',chat.subUrl]" class="channel-hex-name" *ngFor="let chat of chats" [ngClass]="{'slack-chat-selected' : selected(chat)}">
+                    <a [routerLink]="['/',hexTeamName,'message',chat.hexName]" class="channel-hex-name" *ngFor="let chat of chats" [ngClass]="{'slack-chat-selected' : selected(chat)}">
                         <img [src]="chat.avatar" />
                         <span class="group-channel" *ngIf="isChannel(chat)">{{chat.name}}</span>
                         <span *ngIf="isDirect(chat)">{{chat.name}}</span>
@@ -60,18 +60,18 @@
 
                 <!-- title panel -->
                 <div class="slack-box-conversation-title">
-                    <div class="slack-box-conversation-title-text">
+                    <div class="slack-box-conversation-title-text" *ngIf="currentChat">
                         <img class="slack-box-message-title-avatar" [src]="currentChat.avatar" />
                         <a class="slack-box-conversation-title-text">{{currentChat.name}}</a>
                     </div>
                 </div>
                 <!-- message list -->
-                <div class="slack-box-message-list">
-                    <div class="slack-message-item" *ngFor="let message of onMessage | async">
+                <div #messagePanel class="slack-box-message-list">
+                    <div class="slack-message-item" *ngFor="let message of currentMessages">
                         <img class="slack-message-avatar" [src]="getMessageAvatar(message)" />
                         <div class="slack-message-group">
                             <div class="slack-message-sender">
-                                {{ message.senderName }}
+                                {{ getMessageSenderName(message)}}
                             </div>
                             <div class="slack-message-content">
                                 <div> {{ message.content }}</div>
@@ -82,7 +82,7 @@
 
                 <!-- input box -->
                 <div class="slack-message-input-box">
-                    <app-partial-message-input-box>
+                    <app-partial-message-input-box [chat]="currentChat">
 
                     </app-partial-message-input-box>
                 </div>

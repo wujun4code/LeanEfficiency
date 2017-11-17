@@ -1,6 +1,9 @@
 @import '../../node_modules/@angular/material/theming';
 @import '/partial-top-nav/navbar-theme';
 @import '/message/message-theme';
+@import '/signup/signup-theme';
+@import './ui-components/ui-theme';
+@import '/team-list/team-list-theme';
 @mixin app-theme($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
@@ -9,6 +12,8 @@
     $foreground: map-get($theme, foreground);
     @include nav-bar-theme($theme);
     @include message-theme($theme);
+    @include signup-theme($theme);
+    @include team-list-theme($theme);
 }
 
 @mixin app-colors($c1, $c2, $c3) {
