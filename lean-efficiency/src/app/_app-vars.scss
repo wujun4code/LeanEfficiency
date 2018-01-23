@@ -1,0 +1,32 @@
+$img-small-size:2em;
+$img-small-medium:4em;
+$img-margin:0.5em;
+$fixed-gap-1em:1em;
+.img-small {
+    height: $img-small-size;
+    margin: $img-margin;
+    vertical-align: middle;
+}
+
+.img-medium {
+    height: $img-small-medium;
+    margin: $img-margin;
+    vertical-align: middle;
+}
+
+* {
+    &,
+    &:active,
+    &:hover,
+    &:focus {
+        text-decoration: none;
+    }
+}
+
+.f-m-l-1 {
+    margin-left: $fixed-gap-1em;
+}
+
+.f-m-l-r-1 {
+    margin: 0 1em;
+}

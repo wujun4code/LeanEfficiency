@@ -6,7 +6,7 @@ import {
   MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatGridListModule, MatIconModule, MatInputModule, MatListModule,
   MatMenuModule, MatNativeDateModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule,
-  MatSidenavModule,
+  MatSidenavModule, MatStepperModule,
   MatSliderModule,
   MatSlideToggleModule, MatSnackBarModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MatTableModule, MatPaginatorModule, MatChipsModule, MatRadioModule, MatSortModule
 } from '@angular/material';
@@ -44,7 +44,8 @@ import {
     CdkTableModule,
     MatChipsModule,
     MatRadioModule,
-    MatSortModule
+    MatSortModule,
+    MatStepperModule
   ]
 })
 export class MaterialDesignModule { }

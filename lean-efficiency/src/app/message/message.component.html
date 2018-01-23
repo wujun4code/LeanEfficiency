@@ -38,20 +38,52 @@
         <div class="slack-content" *ngIf="isSlackMode">
             <!-- left bar -->
             <div class="slack-left-nav-bar">
-                <!-- <div class="slack-search-box">
-                    <mat-form-field>
+                <div class="slack-search-box">
+                    <mat-form-field class="search-text-filter">
                         <input matInput placeholder="{{ 'search-chat' | translate}}">
                         <mat-icon matSuffix>search</mat-icon>
                     </mat-form-field>
-                    <button mat-icon-button color="primary">
+                    <button mat-icon-button color="primary" [matMenuTriggerFor]="createMenu">
                         <mat-icon aria-label="">add</mat-icon>
                     </button>
-                </div> -->
+                    <mat-menu #createMenu="matMenu">
+                        <div class="create-selection">
+                            <a mat-menu-item (click)="openLogOutDialog()">{{ 'disscusion-group' | translate}}</a>
+                            <span matTooltip="{{ 'disscusion-group-tooltip' | translate}}" matTooltipPosition="after">
+                                <mat-icon aria-label="">help_outline</mat-icon>
+                            </span>
+                        </div>
+                        <!-- <div class="create-selection">
+                            <button mat-menu-item>{{ 'persistent-group' | translate}}</button>
+                            <span matTooltip="{{ 'persistent-group-tooltip' | translate}}" matTooltipPosition="after">
+                                <mat-icon aria-label="">help_outline</mat-icon>
+                            </span>
+                        </div> -->
+                        <div class="create-selection">
+                            <a mat-menu-item>{{ 'pubsub-channel' | translate}}</a>
+                            <span matTooltip="{{ 'pubsub-channel-tooltip' | translate}}" matTooltipPosition="after">
+                                <mat-icon aria-label="">help_outline</mat-icon>
+                            </span>
+                        </div>
+                        <!-- <div class="create-selection">
+                            <button mat-menu-item>{{ 'guest-room' | translate}}</button>
+                            <span matTooltip="{{ 'guest-room-tooltip' | translate}}" matTooltipPosition="after">
+                                <mat-icon aria-label="">help_outline</mat-icon>
+                            </span>
+                        </div> -->
+                    </mat-menu>
+                </div>
                 <div class="channel-left-bar-list">
-                    <a [routerLink]="['/message',chat.subUrl]" class="channel-hex-name" *ngFor="let chat of chats" [ngClass]="{'slack-chat-selected' : selected(chat)}">
-                        <img [src]="chat.avatar" />
-                        <span class="group-channel" *ngIf="isChannel(chat)">{{chat.name}}</span>
-                        <span *ngIf="isDirect(chat)">{{chat.name}}</span>
+                    <a [routerLink]="['/',hexTeamName,'message',chat.hexName]" class="d-f-r-sb channel-hex-name" *ngFor="let chat of chats" [ngClass]="{'slack-chat-selected' : selected(chat)}">
+                        <div>
+                            <img [src]="chat.avatar" />
+                            <span class="group-channel" *ngIf="isChannel(chat)">{{chat.fixName}}</span>
+                            <span *ngIf="isDirect(chat)">{{chat.name}}</span>
+                        </div>
+                        <div>
+                            <span *ngIf="chat.unreadCount > 0" class="unread-tip">{{chat.unreadCount}}</span>
+                        </div>
+
                     </a>
                 </div>
             </div>
@@ -59,22 +91,35 @@
             <div class="slack-box">
 
                 <!-- title panel -->
-                <div class="slack-box-conversation-title">
-                    <div class="slack-box-conversation-title-text">
+                <div class="slack-box-conversation-title d-f-r-sb">
+                    <div class="slack-box-conversation-title-text" *ngIf="currentChat">
                         <img class="slack-box-message-title-avatar" [src]="currentChat.avatar" />
                         <a class="slack-box-conversation-title-text">{{currentChat.name}}</a>
                     </div>
+                    <div class="group-actions d-f-r-sb a-c">
+
+                        <button mat-icon-button matTooltip="{{ 'member-management' | translate}}">
+                            <mat-icon aria-label="">people</mat-icon>
+                        </button>
+
+                        <button mat-icon-button matTooltip="{{ 'bulletin' | translate}}">
+                            <mat-icon aria-label="">assignment</mat-icon>
+                        </button>
+                    </div>
                 </div>
                 <!-- message list -->
-                <div class="slack-box-message-list">
-                    <div class="slack-message-item" *ngFor="let message of onMessage | async">
-                        <img class="slack-message-avatar" [src]="getMessageAvatar(message)" />
-                        <div class="slack-message-group">
-                            <div class="slack-message-sender">
-                                {{ message.senderName }}
-                            </div>
-                            <div class="slack-message-content">
-                                <div> {{ message.content }}</div>
+                <div #messagePanel class="slack-box-message-list">
+                    <div *ngIf="currentChat != undefined">
+                        <div class="slack-message-item" *ngFor="let message of currentChat.messages">
+                            <img class="slack-message-avatar" [src]="getMessageAvatar(message)" />
+                            <div class="slack-message-group">
+                                <div class="slack-message-sender">
+                                    <span class="slack-sender-name"> {{ getMessageSenderName(message)}}</span>
+                                    <span class="slack-sent-at" matTooltip="{{ (message.timestamp | amFromUnix) | amDateFormat:'YYYY-MM-DD HH:mm:ss'}}" matTooltipPosition="after">{{ (message.timestamp | amFromUnix) | amDateFormat:'HH:mm'}}</span>
+                                </div>
+                                <div class="slack-message-content">
+                                    <div> {{ message.content }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -82,7 +127,7 @@
 
                 <!-- input box -->
                 <div class="slack-message-input-box">
-                    <app-partial-message-input-box>
+                    <app-partial-message-input-box [chat]="currentChat">
 
                     </app-partial-message-input-box>
                 </div>

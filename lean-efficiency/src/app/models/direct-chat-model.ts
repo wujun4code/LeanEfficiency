@@ -1,8 +1,7 @@
 import { IUIChatModelListItemModel, ChatCategory } from './ui-chat-model-list-item-model';
+import { MessageModel } from './message-model';
 
-export class DirectChatModel implements IUIChatModelListItemModel {
-
-    lastMessageSummary: string;
+export class DirectChatModel extends IUIChatModelListItemModel {
 
     set name(value: string) {
         this.textName = value;
@@ -19,10 +18,10 @@ export class DirectChatModel implements IUIChatModelListItemModel {
 
     }
 
-    set subUrl(value: string) {
+    set hexName(value: string) {
 
     }
-    get subUrl() {
+    get hexName() {
         return '@' + this.hexPeerId;
     }
 

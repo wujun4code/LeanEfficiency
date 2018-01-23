@@ -1,0 +1,126 @@
+<div class="main">
+
+    <div class="app-top-nav">
+        <nav class="team-create-top-bar">
+            <a mat-button *ngIf="!loggedIn" [routerLink]="['/login']">
+                <mat-icon aria-label="">arrow_back</mat-icon>
+                <span> {{ 'log-in' | translate }}</span>
+            </a>
+
+            <button class="profile" mat-button [matMenuTriggerFor]="menu" *ngIf="loggedIn">
+                <mat-icon>perm_identity</mat-icon>
+                <span>{{admin.nickName}}</span>
+            </button>
+
+            <mat-menu #menu="matMenu">
+                <!-- <button mat-menu-item>
+                    <mat-icon>settings</mat-icon>
+                    <span>{{ 'settings' | translate }}</span>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon>account_circle</mat-icon>
+                    <span>{{ 'profile' | translate }}</span>
+                </button> -->
+                <button mat-menu-item (click)="openLogOutDialog()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>{{ 'log-out' | translate }}</span>
+                </button>
+            </mat-menu>
+
+            <a mat-button [routerLink]="['/team']" *ngIf="hadTeam | async">
+                <span> {{ 'back-to-team-list' | translate }}</span>
+                <mat-icon aria-label="">arrow_forward</mat-icon>
+            </a>
+        </nav>
+    </div>
+    <div class="app-content">
+        <mat-card class="team-create-card">
+            <mat-card-header>
+                <!-- <div mat-card-avatar class="example-header-image"></div> -->
+                <mat-card-title>{{ 'team-create-title'| translate }}</mat-card-title>
+                <mat-card-subtitle>{{ 'team-create-subtitle'| translate }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-horizontal-stepper [linear]="isLinear">
+                    <mat-step [stepControl]="userBasicFormGroup" *ngIf="!loggedIn">
+                        <form [formGroup]="userBasicFormGroup" class="signup-info-form">
+                            <ng-template matStepLabel>{{ 'create-step-one-title'| translate }}</ng-template>
+                            <mat-form-field matTooltip="{{ 'username-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                <input matInput placeholder="{{ 'username'| translate }}" formControlName="usernameCtrl" required>
+                            </mat-form-field>
+                            <mat-form-field matTooltip="{{ 'hexName-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                <input matInput placeholder="{{ 'hexName'| translate }}" formControlName="hexNameCtrl" required>
+                            </mat-form-field>
+                            <mat-form-field matTooltip="{{ 'nickName-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                <input matInput placeholder="{{ 'nickName'| translate }}" formControlName="nickNameCtrl" required>
+                            </mat-form-field>
+                            <div>
+                                <button mat-raised-button color="primary" matStepperNext>{{ 'next-step' | translate }}</button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step [stepControl]="securityFormGroup" *ngIf="!loggedIn">
+                        <form [formGroup]="securityFormGroup">
+                            <ng-template matStepLabel>{{ 'sign-up-step-two-title'| translate }}</ng-template>
+                            <div>
+                                <mat-form-field matTooltip="{{ 'password-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                    <input matInput type="password" placeholder="{{ 'password' | translate}}" formControlName="passwordCtrl" required>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="password" placeholder="{{ 'repeatPassword' | translate}}" formControlName="repeatPasswordCtrl" required>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field matTooltip="{{ 'email-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                    <input matInput placeholder="{{ 'email' | translate}}" formControlName="emailCtrl" required>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <mat-form-field matTooltip="{{ 'mobile-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                    <input matInput placeholder="{{ 'mobile' | translate}}" formControlName="mobileCtrl">
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <button mat-raised-button color="primary" matStepperPrevious>{{ 'previous-step' | translate }}</button>
+                                <button mat-raised-button color="primary" matStepperNext (click)="sinup()">{{ 'next-step' | translate }}</button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step [stepControl]="teamFormGroup">
+                        <form [formGroup]="teamFormGroup">
+                            <ng-template matStepLabel>{{ 'create-step-three-title'| translate }}</ng-template>
+                            <div>
+                                <mat-form-field matTooltip="{{ 'hexTeamName-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                    <input matInput placeholder="{{ 'hexTeamName' | translate}}" formControlName="teamHexIdCtrl" required>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field matTooltip="{{ 'teamName-tooltip'| translate }}" [matTooltipPosition]="tooltipPosition">
+                                    <input matInput placeholder="{{ 'teamName' | translate}}" formControlName="teamNameCtrl" required>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <button mat-raised-button color="primary" matStepperPrevious>{{ 'previous-step' | translate }}</button>
+                                <button mat-raised-button color="primary" matStepperNext type="submit" (click)="create()">{{ 'next-step' | translate }}</button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step>
+                        <ng-template matStepLabel>{{ 'sign-up-step-complete-title'| translate }}</ng-template>
+                        <div class="team-created">
+                            <span>
+                                {{ 'thanks-for-registered' | translate }}
+                            </span>
+                            <div>
+                                <a mat-raised-button [routerLink]="['/',hexTeamName,'message','general']" color="primary" (click)="doSelect()">{{ 'begin-new-trip' | translate }}</a>
+                            </div>
+                        </div>
+                    </mat-step>
+                </mat-horizontal-stepper>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

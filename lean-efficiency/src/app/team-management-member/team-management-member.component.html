@@ -1,0 +1,53 @@
+<mat-tab-group>
+  <mat-tab label="{{ 'memberd' | translate }}">
+    <mat-list>
+      <mat-list-item *ngFor="let member of membersInTeamMetaData">
+        <img matListAvatar src="assets/img/no-avatar.jpg">
+        <h3 matLine> {{member.nickName}} </h3>
+        <p matLine>
+          <span> @{{member.hexName}} </span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-tab>
+  <mat-tab label="{{ 'add-member' | translate }}">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{ 'typing-filter' | translate }}">
+    </mat-form-field>
+
+    <div class="w100">
+      <mat-table [dataSource]="warppedUserData" matSort>
+        <ng-container matColumnDef="selected">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{'operation' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <!-- <section>
+              <mat-checkbox [(ngModel)]="row.selected"></mat-checkbox>
+            </section> -->
+            <button mat-raised-button color="primary" *ngIf="showAdd(row.entity)" (click)="add(row.entity)">{{ 'add' | translate }}</button>
+          </mat-cell>
+
+        </ng-container>
+
+        <ng-container matColumnDef="hexName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'hexName' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> @{{row.get('hexName')}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nickName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'nickName' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.get('nickName')}}</mat-cell>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="username">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'username' | translate }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.username}} </mat-cell>
+        </ng-container> -->
+
+        <mat-header-row *matHeaderRowDef="userDisplayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: userDisplayedColumns;">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="pageSizeEnums"></mat-paginator>
+    </div>
+  </mat-tab>
+</mat-tab-group>

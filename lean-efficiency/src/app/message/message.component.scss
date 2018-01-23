@@ -2,7 +2,6 @@ $slack-left-bar-bgc: #212121;
 $fixed-margin:1em;
 $hover-bgc:#757575;
 $content-text-color: rgb(84, 87, 99);
-
 // ::-webkit-scrollbar {
 //     -webkit-appearance:slider-vertical;
 //     //width: 7px;
@@ -79,33 +78,51 @@ $content-text-color: rgb(84, 87, 99);
 //slack layout
 .slack-left-nav-bar {
     width: 15em;
-    color: rgba(0, 0, 0, .5);
-    //overflow-y: scroll;
+    color: rgba(0, 0, 0, .5); //overflow-y: scroll;
     align-content: stretch;
     display: flex;
+    flex-direction: column;
 }
 
-.channel-left-bar-list{
-    align-content:stretch;
-    align-items:stretch;
+.search-text-filter {
+    width: 80%;
+}
+
+.create-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    >span {
+        margin: 0 0.5em;
+    }
+}
+
+.create-selection:hover {
+    cursor: pointer;
+}
+
+.channel-left-bar-list {
+    align-content: stretch;
+    align-items: stretch;
     width: 100%;
     overflow-y: scroll;
 }
+
 .channel-hex-name {
     display: flex;
-    padding:0 2em 0 1em;
-    margin: 0 0.4em;
+    padding: 0 1em 0 1em;
     font-size: 1em;
     align-items: center;
+    width: 100%;
 }
 
-.channel-hex-name>img {
+.channel-hex-name img {
     height: 1.5em;
     margin: 0.5em;
     vertical-align: middle;
 }
 
-.channel-hex-name>span.group-channel:before {
+.channel-hex-name span.group-channel:before {
     content: '#';
 }
 
@@ -117,18 +134,17 @@ $content-text-color: rgb(84, 87, 99);
     display: flex;
     flex-direction: column;
     flex: 1; // border-left: 2px solid #f1f1f1;
+    justify-content: space-between;
 }
 
 .slack-box-conversation-title {
     width: 100%;
     min-height: 5em;
-    display: flex;
 }
 
 .slack-box-conversation-title-text {
     display: flex;
-    align-items: center;
-    // color: $content-text-color;
+    align-items: center; // color: $content-text-color;
     font-weight: 700;
     margin-left: $fixed-margin;
 }
@@ -141,9 +157,17 @@ img.slack-box-message-title-avatar {
     height: 3em;
 }
 
+.group-actions {
+    margin-right: 2em;
+}
+
 .channel-left-bar-list,
 .slack-box-message-list {
     overflow-y: scroll;
+}
+
+.slack-box-message-list {
+    flex-basis: 100%;
 }
 
 .slack-message-item {
@@ -164,6 +188,17 @@ img.slack-message-avatar {
 }
 
 .slack-message-group>.slack-message-sender {
+    // font-weight: 600;
+    // color: $content-text-color;
+}
+
+.slack-sent-at {
+    font-weight: 500;
+    font-size: 0.8em;
+    color: $content-text-color;
+}
+
+.slack-sender-name {
     font-weight: 600;
     color: $content-text-color;
 }

@@ -1,0 +1,45 @@
+<div class="main">
+
+    <div class="app-top-nav">
+        <nav class="login-top-bar">
+            <a mat-button [routerLink]="['/signup']">
+                <mat-icon aria-label="">arrow_back</mat-icon>
+                <span> {{ 'sign-up' | translate }}</span>
+            </a>
+            <!-- <a mat-button [routerLink]="['/create']">
+                <span> {{ 'create-new-team' | translate }}</span>
+                <mat-icon aria-label="">arrow_forward</mat-icon>
+            </a> -->
+        </nav>
+    </div>
+    <div class="app-content">
+
+        <mat-card class="login-card">
+            <mat-card-header>
+                <mat-card-title>{{ 'log-in'| translate }}</mat-card-title>
+                <mat-card-subtitle>{{ 'log-in-subtitle'| translate }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="loginFormGroup" class="login-form">
+                    <ng-template matStepLabel>{{ 'sign-up-step-one-title'| translate }}</ng-template>
+                    <div>
+                        <mat-form-field>
+                            <input matInput placeholder="{{ 'username'| translate }}" formControlName="usernameCtrl" required>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <input matInput placeholder="{{ 'password'| translate }}" formControlName="passwordCtrl" type="password" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="login-form-actions">
+                        <button mat-raised-button color="primary" type="submit" (click)="logIn()">{{ 'log-in'| translate }}</button>
+                    </div>
+                </form>
+                <!-- <div class="other-action">
+                    <a mat-raised-button color="primary" [routerLink]="['/create']">{{ 'create-new-team'| translate }}</a>
+                </div> -->
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

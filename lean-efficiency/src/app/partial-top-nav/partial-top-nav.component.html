@@ -1,10 +1,20 @@
 <nav class="le-nav-bar">
-  <a mat-button aria-label="LeanEfficiency">
+  <a mat-button aria-label="LeanEfficiency" [matMenuTriggerFor]="teamMenu">
     <img class="logo" src="../../assets/img/LeanCloud-Avatar.svg" alt="LeanEfficiency">
-    <span>LeanEfficiency</span>
+    <span>WorkChat</span>
   </a>
+  <mat-menu #teamMenu="matMenu">
+    <a mat-menu-item [routerLink]="['/',teamHexName,'manage']">
+      <mat-icon>settings</mat-icon>
+      <span>{{ 'team-management' | translate }}</span>
+    </a>
+    <a mat-menu-item [routerLink]="['/','team']">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>{{ 'team-switch' | translate }}</span>
+    </a>
+  </mat-menu>
   <div>
-    <a mat-button *ngIf="!loggedIn">
+    <!-- <a mat-button *ngIf="!loggedIn">
       <span> {{ 'sign-up' | translate }}</span>
     </a>
     <a mat-button *ngIf="!loggedIn">
@@ -21,7 +31,7 @@
     </a>
     <a mat-button *ngIf="loggedIn">
       <span> {{ 'notification' | translate }}</span>
-    </a>
+    </a> -->
     <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="loggedIn">
       <mat-icon>more_vert</mat-icon>
     </button>

@@ -32,7 +32,7 @@
         } // .slack-chat-selected:hover {
         //     color: #ffffff;
         // }
-        .slack-message-sender:hover {
+        .slack-sender-name:hover {
             color: mat-color($primary);
             cursor: pointer;
         }
@@ -43,20 +43,27 @@
         .slack-message-input-box {
             border-top: 1px solid mat-color($foreground, divider);
         }
+        .unread-tip {
+            color: mat-color($foreground, secondary-text);
+        }
     }
 }
 
-@mixin message-tags($hoverColor,$selectedColor,$selectedBgc) {
+@mixin message-tags($hoverColor, $selectedColor, $selectedBgc) {
     app-message {
         .slack-box-conversation-title {
             // color: mat-color($primary, default-contrast);
         }
         .channel-hex-name:hover {
-            background: rgba(0,0,0,0.025);;
+            background: rgba(0, 0, 0, 0.025);
         }
         .slack-chat-selected {
             color: mat-color($selectedColor);
-            background:rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .unread-tip {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0 0.5em;
         }
     }
 }
