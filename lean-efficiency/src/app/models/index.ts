@@ -1,4 +1,4 @@
-export { BaseModel } from './base-model';
+export { BaseModel, SelectableWrapper } from './base-model';
 export { TeamModel, TeamFields } from './team-model';
 export { UserModel, UserFields } from './user-model';
 export { RoleModel } from './role-model';

@@ -5,24 +5,52 @@ import { UserService } from './user-service';
 
 import { UserModel } from '../models/user-model';
 import { TeamModel } from '../models/team-model';
-import { RxAVQuery, RxAVObject, RxAVIMHistoryIterator, RxAVIMMessage } from 'rx-lean-js-core';
+import { RxAVQuery, RxAVObject, RxAVIMHistoryIterator, RxAVIMMessage, RxAVIMConversation, RxAVIMExtGroupChat } from 'rx-lean-js-core';
 import { Relation_Team_Conversation, Relation_User_Conversation } from '../models/relation-models';
+import { Subject } from 'rxjs/Subject';
 
+
+export class ChatNotice {
+    chat: IUIChatModelListItemModel;
+    scope: string;
+}
 
 @Injectable()
 export class MessageService {
     _chats: Array<IUIChatModelListItemModel>;
+    onChatNoticeReceived: Subject<ChatNotice>;
 
     constructor(public userService: UserService) {
-        this._chats = [];
+        // this._chats = [];
 
         //this.initMockData();
+
+        this.onChatNoticeReceived = new Subject<ChatNotice>();
 
     }
     initChannelList(user: UserModel, team: TeamModel) {
         return this.queryChannels(user, team).map(channels => {
+            channels.forEach(c => {
+                c.initHistory(this.userService.realtime.history(c.id));
+                c.startReceive(this.userService.realtime.onConversationMessage(c.id));
+                c.markRead();
+            });
+            if (!this._chats) this._chats = [];
             this._chats.push(...channels);
             return this.chats;
+        });
+    }
+    initChatList(user: UserModel, team: TeamModel) {
+        if (this.chats) return Observable.from([this.chats]);
+        return this.initChannelList(user, team);
+    }
+    startListenConversationChanged() {
+        this.userService.realtime.onConversationNotice.subscribe(notice => {
+            if (notice.joined) {
+                let metaConversation = new RxAVIMConversation();
+                metaConversation.id = notice.convId;
+
+            }
         });
     }
     initMockData() {
@@ -91,10 +119,9 @@ export class MessageService {
             let channels = team_conv_users.map(item => {
                 let channel = new GroupChannelModel();
                 let chatMetaData = item.get(Relation_Team_Conversation.keys.conversation) as RxAVObject;
-                channel.id = ((item.get('conv') as RxAVObject).get(Relation_Team_Conversation.keys.conversation) as RxAVObject).objectId;
-
+                let tunnel = (item.get('conv') as RxAVObject).get('tunnel') as RxAVObject;
+                channel.id = tunnel.objectId;
                 channel.avatar = 'assets/img/LeanCloud-Avatar.svg';
-                channel.nameHex = chatMetaData.get('hexName');
                 channel.name = chatMetaData.get('name');
                 channel.hexName = chatMetaData.get('hexName');
                 return channel;
@@ -117,6 +144,7 @@ export class MessageService {
         let message = new MessageModel();
         message.id = metaMessage.id;
         message.senderId = metaMessage.from;
+        message.timestamp = metaMessage.timestamp / 1000;
         let messageJson = metaMessage.toJson();
         if (Object.prototype.hasOwnProperty.call(messageJson, 'type')) {
             let mType = messageJson['type'];

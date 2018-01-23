@@ -12,3 +12,14 @@ export class BaseModel {
         this._metaData = v;
     }
 }
+
+export class SelectableWrapper<T> {
+    selected: boolean;
+    entity: T;
+    constructor(_entity: T) {
+        this.entity = _entity;
+    }
+    get(key: string) {
+        return this.entity[key];
+    }
+}

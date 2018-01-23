@@ -24,20 +24,32 @@ export class PartialMessageInputBoxComponent implements OnInit {
   }
 
   onEnter(event) {
-
     let value = event.target.value;
-    console.log('value', value);
-
+    let valueStr = value.toString();
+    if (valueStr.trim() == '') {
+      event.target.value = null;
+      return 0;
+    }
+    this.chat.markRead();
     this.sendText(value.toString()).subscribe(success => {
       if (success) {
         event.target.value = null;
       }
     });
   }
+  onClick(){
+    this.chat.markRead();
+  }
+  enterKeyUp(event) {
+    console.log('enterKeyUp', event);
+  }
+
+  enterKeyDown(event) {
+    console.log('enterKeyDown', event);
+  }
 
   send(fixContent: any) {
     if (this.chat) {
-      console.log('fixContent', fixContent);
       return this.userService.realtime.send(this.chat.id, fixContent).map(message => {
         if (message instanceof RxAVIMMessage) {
           this.onSent.next(message);

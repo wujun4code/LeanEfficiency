@@ -1,8 +1,7 @@
 import { IUIChatModelListItemModel, ChatCategory } from './ui-chat-model-list-item-model';
+import { MessageModel } from './message-model';
 
-export class DirectChatModel implements IUIChatModelListItemModel {
-
-    lastMessageSummary: string;
+export class DirectChatModel extends IUIChatModelListItemModel {
 
     set name(value: string) {
         this.textName = value;

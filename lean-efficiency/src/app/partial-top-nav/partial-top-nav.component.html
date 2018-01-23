@@ -1,8 +1,18 @@
 <nav class="le-nav-bar">
-  <a mat-button aria-label="LeanEfficiency">
+  <a mat-button aria-label="LeanEfficiency" [matMenuTriggerFor]="teamMenu">
     <img class="logo" src="../../assets/img/LeanCloud-Avatar.svg" alt="LeanEfficiency">
     <span>WorkChat</span>
   </a>
+  <mat-menu #teamMenu="matMenu">
+    <a mat-menu-item [routerLink]="['/',teamHexName,'manage']">
+      <mat-icon>settings</mat-icon>
+      <span>{{ 'team-management' | translate }}</span>
+    </a>
+    <a mat-menu-item [routerLink]="['/','team']">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>{{ 'team-switch' | translate }}</span>
+    </a>
+  </mat-menu>
   <div>
     <!-- <a mat-button *ngIf="!loggedIn">
       <span> {{ 'sign-up' | translate }}</span>

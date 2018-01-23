@@ -3,6 +3,7 @@
 @import '~@angular/material/theming';
 @include mat-core();
 @import './app/app-theme';
+@import './app/app-colors';
 // Define the light theme.
 $primary: mat-palette($mat-indigo);
 $accent: mat-palette($mat-amber);
@@ -48,6 +49,47 @@ a {
 .app-content {
     display: flex;
     flex-basis: 100%;
+}
+
+.d-f {
+    display: flex;
+}
+
+.d-f-w {
+    @extend .d-f;
+    flex-wrap: wrap;
+}
+
+.d-f-c {
+    @extend .d-f;
+    flex-direction: column;
+}
+
+.d-f-r-sb {
+    @extend .d-f;
+    justify-content: space-between;
+}
+
+.d-f-r-sa {
+    @extend .d-f;
+    justify-content: space-around;
+}
+
+.d-f-r-sa-c {
+    @extend .d-f-r-sa;
+    align-items: center;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.a-c {
+    align-items: center;
+}
+
+mat-cell {
+    overflow: visible !important;
 }
 
 @include app-theme($theme);

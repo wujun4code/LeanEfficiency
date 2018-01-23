@@ -3,19 +3,29 @@ import { Observable } from 'rxjs';
 import { RxAVUser, RxAVObject, RxAVQuery } from 'rx-lean-js-core';
 import * as random from "./util-service";
 import { UserModel, InvitationTokenConfig, TeamModel, TeamFields, Relation_Team_User_Keys, RoleModel } from '../models';
+import { UserService } from './user-service';
+import { Relation_Team_Conversation } from '../models/relation-models';
+
 
 @Injectable()
 export class TeamService {
     _teams: Array<TeamModel>;
     _current: TeamModel;
 
+    constructor(public userService: UserService) {
+
+    }
+
     teams(user: UserModel): Observable<Array<TeamModel>> {
+        console.log('query teams');
+        console.log('current teams', this._teams);
         if (this._teams) {
             return Observable.from([this._teams]);
         }
         let query = new RxAVQuery(Relation_Team_User_Keys.className);
         query.equalTo(Relation_Team_User_Keys.keys.user, user.metaData);
         query.include(Relation_Team_User_Keys.keys.team);
+        query.descending('updatedAt');
         return query.find().map(relation_user_teams => {
             let teamMetaDatas = relation_user_teams.map(r => {
                 return r.get(Relation_Team_User_Keys.keys.team) as RxAVObject;
@@ -45,20 +55,29 @@ export class TeamService {
     current(): Observable<TeamModel> {
         if (this._current) {
             return Observable.from([this._current]);
-        }
+        } else return this.lastChoice();
     }
 
-    go(hexName: string) {
+    go(hexName?: string) {
         if (this._current) {
-            if (hexName == this._current.hexName) {
+            if (hexName == this._current.hexName || hexName == undefined) {
                 return this.current();
             }
-        } else {
+        } else if (hexName) {
             return this.getByHexName(hexName).map(team => {
                 this._current = team;
                 return this._current;
             });
+        } else {
+            this.lastChoice();
         }
+    }
+    lastChoice(): Observable<TeamModel> {
+        return this.userService.current().flatMap(user => {
+            return this.teams(user);
+        }).map(teams => {
+            return teams[0];
+        });
     }
 
     getByHexName(hexName: string): Observable<TeamModel> {
@@ -113,5 +132,23 @@ export class TeamService {
         return relation_team_user.save();
     }
 
+    members(team: TeamModel) {
+        let query = new RxAVQuery(Relation_Team_User_Keys.className);
+        query.equalTo(Relation_Team_User_Keys.keys.team, team.metaData);
+        query.include(Relation_Team_User_Keys.keys.user);
+        return query.find().map(relation_user_teams => {
+            let userMetaDatas = relation_user_teams.map(r => {
+                return r.get(Relation_Team_User_Keys.keys.user) as RxAVUser;
+            });
+
+            let users = userMetaDatas.map(metaData => {
+                let user = new UserModel();
+                user.restoreFromAVUser(metaData);
+                return user;
+            });
+
+            return users;
+        });
+    }
 }
 

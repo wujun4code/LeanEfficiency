@@ -30,7 +30,7 @@ export class UserModel extends BaseModel {
      * @type {string}
      * @memberof UserModel
      */
-    hexUserId: string;
+    hexName: string;
 
     /**
      * _User 表对应的 username 字段
@@ -59,7 +59,8 @@ export class UserModel extends BaseModel {
         this.email = userMetaData.email;
         this.mobile = userMetaData.mobilephone;
         this.username = userMetaData.username;
-        this.hexUserId = userMetaData.get(UserFields.keys.hexName);
+        this.clientId = userMetaData.username;
+        this.hexName = userMetaData.get(UserFields.keys.hexName);
     }
 }
 

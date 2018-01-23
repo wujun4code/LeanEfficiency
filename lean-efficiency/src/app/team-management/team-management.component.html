@@ -1,0 +1,22 @@
+<div class="main">
+  <div class="app-content">
+    <div class="d-f-c b-r">
+      <a [routerLink]="['/',teamHexName,'message']" class="d-f-c a-c" matTooltip="{{'back-to-message-tooltip' | translate }}" matTooltipPosition="right">
+        <img class="img-medium" src="assets/img/LeanCloud-Avatar.svg">
+        <span>{{teamName}}</span>
+      </a>
+      <mat-list>
+        <mat-list-item class="side-nav" *ngFor="let sideNav of sideNavs">
+          <a [routerLink]="['/',teamHexName,'manage',sideNav.route]" class="d-f a-c">
+            <mat-icon matListIcon>{{sideNav.icon}}</mat-icon>
+            <h3 matLine> {{sideNav.textKey | translate }} </h3>
+          </a>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="f-m-l-r-1 w100">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+</div>

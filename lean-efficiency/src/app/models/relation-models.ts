@@ -13,7 +13,8 @@ export const Relation_Team_Conversation = {
         conversation: 'conv',
         category: 'category',
         scope: 'scope'
-    }
+    },
+    generalCategory: 'general'
 };
 
 export const Relation_User_Conversation = {

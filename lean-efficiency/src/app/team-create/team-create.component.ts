@@ -46,6 +46,7 @@ export class TeamCreateComponent implements OnInit {
       teamNameCtrl: ['', Validators.required],
     });
     this.userService.current().map(user => {
+      console.log('create:user#current()', user);
       this.setAdmin(user);
     }).subscribe(() => { });
   }
@@ -70,6 +71,7 @@ export class TeamCreateComponent implements OnInit {
 
   setAdmin(user: UserModel) {
     if (user) {
+      console.log('setAdmin', user);
       this.loggedIn = true;
       this.admin = user;
       this.userBasicFormGroup.value.usernameCtrl = this.admin.username;

@@ -1,0 +1,72 @@
+<div class="d-f-c">
+  <div class="d-f-r-sb">
+    <h2>{{ 'create' | translate }}{{ 'disscusion-group' | translate }}</h2>
+    <button mat-button (click)="close()">取消
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="conversationFormGroup" class="d-f-c">
+    <section>
+      <mat-slide-toggle formControlName="isPrivate" (change)="toggled($event)">
+        {{ chatTypeText | translate }}{{ 'disscusion-group' | translate }}
+      </mat-slide-toggle>
+      <h5>{{ chatTypeAriaLable | translate }}</h5>
+    </section>
+    <mat-form-field>
+      <input matInput type="text" placeholder="{{ 'disscusion-group' | translate }}{{ 'hexName' | translate }}" formControlName="hexName"
+      />
+      <!-- <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button> -->
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" placeholder="{{ 'disscusion-group' | translate }}{{ 'name' | translate }}" formControlName="name"
+      />
+      <!-- <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button> -->
+    </mat-form-field>
+  </form>
+
+  <div>
+    <span>{{ 'select' | translate}}{{ 'member' | translate}}</span>
+    <mat-table [dataSource]="memberData" matSort>
+      <ng-container matColumnDef="checked">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{'checked' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <section>
+            <mat-checkbox [(ngModel)]="row.checked"></mat-checkbox>
+          </section>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="clientId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'clientId' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.clientId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="screenName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'nickName' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.screenName}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="hexName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'hexName' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.hexName}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="memberDisplayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: memberDisplayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5]"></mat-paginator>
+  </div>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{ 'typing-filter' | translate }}">
+  </mat-form-field>
+  <div>
+    <button mat-raised-button color="primary" [disabled]="!canCreate" (click)="create()">{{ 'create'| translate }}</button>
+  </div>
+</div>

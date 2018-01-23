@@ -5,6 +5,8 @@ import { IUIChatModelListItemModel, ChatCategory, MessageModel, TeamModel, UserM
 import { Observable } from 'rxjs';
 import { PartialMessageInputBoxComponent } from '../partial-message-input-box/partial-message-input-box.component';
 import { RxAVIMMessage } from 'rx-lean-js-core';
+import { ConversationCreateComponent } from '../conversation-create/conversation-create.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export enum LayoutMode {
   Wechat = 1,
@@ -27,58 +29,50 @@ export class MessageComponent implements OnInit {
   hexConvName: string;
   _layoutMode: LayoutMode = LayoutMode.Wechat;
 
-  onMessage: Observable<Array<MessageModel>>;
+  onMessage: Observable<MessageModel> = null;
 
   currentMessages: Array<MessageModel> = [];
 
   constructor(public route: ActivatedRoute,
     public routeService: Router,
     public teamService: TeamService,
+    public dialog: MatDialog,
     public messageService: MessageService,
     public userService: UserService) {
-
-
     route.params.subscribe(params => {
 
       this.hexConvName = params['hexConvName'];
       this.hexTeamName = params['hexTeamName'];
+      if (!this.hexConvName) {
+        this.routeService.navigateByUrl(`/${this.hexTeamName}/message/general`);
+      } else {
+        Observable.zip(this.userService.current(), this.teamService.go(this.hexTeamName)).flatMap(tupple => {
+          let team = tupple[1];
+          let user = tupple[0];
+          return this.messageService.initChatList(this.userService._currentUser, this.teamService._current);
+        }).subscribe(chats => {
+          this.chats = chats;
+          this.currentChat = this.chats.find(c => c.hexName == this.hexConvName);
+          this.currentChat.markRead();
+        });
+      }
 
-      Observable.zip(this.userService.current(), this.teamService.go(this.hexTeamName)).flatMap(tupple => {
-        let team = tupple[1];
-        let user = tupple[0];
-        return this.messageService.queryChannels(this.userService._currentUser, this.teamService._current);
-      }).flatMap(chats => {
-        this.chats = chats;
-        this.currentChat = this.chats.find(c => c.hexName == this.hexConvName);
-        return this.messageService.loadMessageHistory(this.currentChat);
-      }).map(messages => {
-        this.currentMessages = messages;
-      }).subscribe(() => {
-        this.userService.realtime.onMessage.filter(message => {
-          return message.convId == this.currentChat.id;
-        }).map(message => {
-          this.whenNewMessageArrived(message);
-        }).subscribe(() => { });
-      });
     });
-
-
   }
 
   ngOnInit() {
     this._layoutMode = LayoutMode.Slack;
-
   }
   whenNewMessageArrived(message: RxAVIMMessage) {
     let messageModel = this.messageService.packMessage(message);
-    this.currentMessages.push(messageModel);
-    this.scrollToBottom();
+    return messageModel;
   }
   ngAfterViewInit() {
     this.messageInputBox.onSent.map(sent => {
-      this.whenNewMessageArrived(sent);
-    }).subscribe(() => {
-
+      return this.whenNewMessageArrived(sent);
+    }).subscribe(messageModel => {
+      this.currentChat.messages.push(messageModel);
+      this.scrollToBottom();
     });
   }
   ngAfterViewChecked() {
@@ -115,14 +109,14 @@ export class MessageComponent implements OnInit {
     return this.currentChat.id == chat.id;
   }
 
-  doSelect(chat: IUIChatModelListItemModel) {
-    if (this.selected(chat)) {
-      return;
-    }
-    this.currentChat = chat;
+  // doSelect(chat: IUIChatModelListItemModel) {
+  //   if (this.selected(chat)) {
+  //     return;
+  //   }
+  //   this.currentChat = chat;
 
-    this.onMessage = this.messageService.loadMessageHistory(chat);
-  }
+  //   this.onMessage = this.messageService.loadMessageHistory(chat);
+  // }
 
   getMessageAvatar(message: MessageModel) {
     let no_avatar = 'assets/img/no-avatar.jpg';
@@ -140,6 +134,17 @@ export class MessageComponent implements OnInit {
 
   send() {
 
+  }
+
+  openLogOutDialog(): void {
+    let dialogRef = this.dialog.open(ConversationCreateComponent, {
+      width: '480px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

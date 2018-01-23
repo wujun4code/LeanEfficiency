@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RxAVUser, RxAVQuery, RxAVObject } from 'rx-lean-js-core';
-import { RxAVRealtime, ExtRXAVIMGroupChat } from 'rx-lean-js-core';
+import { RxAVRealtime, RxAVIMExtGroupChat, RxAVIMConversation } from 'rx-lean-js-core';
 import { UserModel, InvitationTokenConfig, UserFields, GroupChannelModel, Relation_Team_Conversation, Relation_User_Conversation } from '../models';
 import { TeamModel } from '../models/team-model';
 
@@ -38,7 +38,7 @@ export class UserService {
         junwu.email = 'jun.wu@leancloud.rocks';
         junwu.id = 'xxx';
         junwu.mobile = '18612438929';
-        junwu.hexUserId = 'junwu';
+        junwu.hexName = 'junwu';
         junwu.nickName = '吴骏';
         return junwu;
     }
@@ -52,7 +52,7 @@ export class UserService {
         wchen.clientId = 'wchen';
         wchen.email = 'wchen@leancloud.rocks';
         wchen.id = '111';
-        wchen.hexUserId = 'wchen';
+        wchen.hexName = 'wchen';
         wchen.mobile = '15658580412';
         wchen.nickName = '陈伟';
 
@@ -61,7 +61,7 @@ export class UserService {
         hjiang.clientId = 'hjiang';
         hjiang.email = 'hjiang@leancloud.rocks';
         hjiang.id = '222';
-        hjiang.hexUserId = 'hjiang';
+        hjiang.hexName = 'hjiang';
         hjiang.mobile = '13812345678';
         hjiang.nickName = '江宏';
 
@@ -71,7 +71,7 @@ export class UserService {
         ttang.email = 'ttang@leancloud.rocks';
         ttang.id = '333';
         ttang.mobile = '18888888888';
-        ttang.hexUserId = 'ttang';
+        ttang.hexName = 'ttang';
         ttang.nickName = '唐天勇';
 
         this._mockContacts.push(current, wchen, hjiang, ttang);
@@ -89,7 +89,7 @@ export class UserService {
     }
 
     contact(userId: string) {
-        return this.mockContacts.find(user => user.id == userId || user.hexUserId == userId || user.clientId == userId);
+        return this.mockContacts.find(user => user.id == userId || user.hexName == userId || user.clientId == userId);
     }
 
     queryInvitationToken(invitationToken: string) {
@@ -137,56 +137,83 @@ export class UserService {
         return this.realtime.connect(user.username);
     }
 
-    createGroupChat(team: TeamModel, hexName: string, name: string, unique: boolean, members?: string[], bulltetin?: string, topic?: string) {
-        let channel = new ExtRXAVIMGroupChat();
-        channel.name = name;
-        channel.admins = [this._currentUser.username];
-        channel.realtimne = this.realtime;
-        channel.metaConversation.unique = unique;
-        if (members)
-            channel.metaConversation.members = members;
+    createGroupChat(team: TeamModel, hexName: string, name: string, unique: boolean, members?: UserModel[], bulltetin?: string, topic?: string) {
 
-        if (bulltetin) {
-            channel.bulletins = [bulltetin];
+        let groupChat = new RxAVIMExtGroupChat();
+        groupChat.set('hexName', hexName.toLocaleLowerCase());
+        groupChat.set('name', name);
+        groupChat.set('admins', [this._currentUser.username]);
+        let tunnel = new RxAVIMConversation();
+        tunnel.unique = unique;
+        groupChat.tunnel = tunnel;
+
+        if (members) {
+            tunnel.members = members.map(m => m.clientId);
         }
-        if (topic) {
-            channel.topics = [topic];
-        }
-        channel.metaPropertyObject.set('hexName', hexName);
-        return channel.create().flatMap(convCreated => {
+
+        return this.realtime.create(tunnel).flatMap(convCreated => {
             let team_conv = new RxAVObject(Relation_Team_Conversation.className);
-            team_conv.set(Relation_Team_Conversation.keys.conversation, channel.metaPropertyObject);
+            team_conv.set(Relation_Team_Conversation.keys.conversation, groupChat);
             team_conv.set(Relation_Team_Conversation.keys.team, team.metaData);
+            if (hexName == 'general') {
+                team_conv.set(Relation_Team_Conversation.keys.category, 'general');
+                team_conv.set(Relation_Team_Conversation.keys.scope, 'all');
+            }
             //team_conv.set(Relation_Team_Conversation.keys.user, this._currentUser.metaData);
             return team_conv.save();
         }).flatMap(teamRelated => {
-            let user_conv = new RxAVObject(Relation_User_Conversation.className);
-            user_conv.set(Relation_User_Conversation.keys.conversation, channel.metaPropertyObject);
-            user_conv.set(Relation_User_Conversation.keys.user, this._currentUser.metaData);
-            user_conv.set(Relation_User_Conversation.keys.team, team.metaData);
-            return user_conv.save();
+            if (!members) {
+                members = [this._currentUser];
+            } else {
+                if (!members.find(u => u.id == this._currentUser.id)) {
+                    members.push(this._currentUser);
+                }
+            }
+            let executers = members.map(m => {
+                let user_conv = new RxAVObject(Relation_User_Conversation.className);
+                user_conv.set(Relation_User_Conversation.keys.conversation, groupChat);
+                user_conv.set(Relation_User_Conversation.keys.user, m.metaData);
+                user_conv.set(Relation_User_Conversation.keys.team, team.metaData);
+                return user_conv.save();
+            });
+            let rtn = Observable.merge(...executers);
+            return rtn;
         });
     }
+
     createGeneral(team: TeamModel) {
         return this.createGroupChat(team, 'general', '所有人', true);
     }
 
-    join(groupChat: ExtRXAVIMGroupChat) {
+    fixUserRelationGroupChat(channel: RxAVIMExtGroupChat, user: UserModel, team: TeamModel) {
+        let user_conv = new RxAVObject(Relation_User_Conversation.className);
+        user_conv.set(Relation_User_Conversation.keys.conversation, channel);
+        user_conv.set(Relation_User_Conversation.keys.user, user.metaData);
+        user_conv.set(Relation_User_Conversation.keys.team, team.metaData);
+        return user_conv.save();
+    }
 
+    join(user: UserModel, groupChat: RxAVIMExtGroupChat, team: TeamModel) {
+        let clientId = user.clientId;
+        let conversationId = groupChat.tunnel.id;
+        let groupChatObject = groupChat;
+        return this.realtime.add(conversationId, [clientId]).flatMap(joined => {
+            return this.fixUserRelationGroupChat(groupChatObject, user, team);
+        });
     }
 
     joinGeneral(team: TeamModel, user: UserModel) {
         let query = new RxAVQuery(Relation_Team_Conversation.className);
         query.equalTo(Relation_Team_Conversation.keys.team, team.metaData);
-        query.equalTo(Relation_Team_Conversation.keys.category, 'general');
+        query.equalTo(Relation_Team_Conversation.keys.category, Relation_Team_Conversation.generalCategory);
         query.include(Relation_Team_Conversation.keys.conversation);
         let conversationProperty: RxAVObject;
         return query.find().flatMap(convs => {
             if (convs.length > 0) {
                 let conv = convs[0];
                 conversationProperty = conv.get(Relation_Team_Conversation.keys.conversation) as RxAVObject;
-                let convId = (conversationProperty.get('conv') as RxAVObject).objectId;
-                return this.realtime.add(convId, [this.realtime.clientId]);
+                let convId = (conversationProperty.get('tunnel') as RxAVObject).objectId;
+                return this.realtime.add(convId, [user.clientId]);
             }
             else {
                 return Observable.from([false]);
@@ -208,8 +235,22 @@ export class UserService {
         return team_user_conv.save();
     }
 
+    list() {
+        let query = new RxAVQuery('_User');
+        return query.find().map(users => {
+            return users.map(u => {
+                let userMetaData = u as RxAVUser;
+                let userModel = new UserModel();
+                userModel.restoreFromAVUser(userMetaData);
+                return userModel;
+            });
+        });
+    }
+
     logOut() {
-        return this.current().flatMap(user => {
+        return this.realtime.close().flatMap(wsClosed => {
+            return this.current();
+        }).flatMap(user => {
             this._currentUser = undefined;
             return user.metaData.logOut();
         });

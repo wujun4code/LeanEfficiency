@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AsyncPipe } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { MomentModule } from 'angular2-moment';
 
 // i18n
 import { TranslateModule, TranslateLoader, TranslatePipe } from '@ngx-translate/core';
@@ -49,6 +50,10 @@ import { LoginComponent } from './login/login.component';
 import { TeamCreateComponent } from './team-create/team-create.component';
 import { LogOutComponent } from './log-out/log-out.component';
 import { TeamListComponent } from './team-list/team-list.component';
+import { ConversationCreateComponent } from './conversation-create/conversation-create.component';
+import { TeamManagementComponent } from './team-management/team-management.component';
+import { TeamManagementMemberComponent } from './team-management-member/team-management-member.component';
+import { TeamManagementOverviewComponent } from './team-management-overview/team-management-overview.component';
 
 // The translate loader needs to know where to load i18n files
 export function HttpLoaderFactory(http: HttpClient) {
@@ -69,7 +74,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginComponent,
     TeamCreateComponent,
     LogOutComponent,
-    TeamListComponent
+    TeamListComponent,
+    ConversationCreateComponent,
+    TeamManagementComponent,
+    TeamManagementMemberComponent,
+    TeamManagementOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +89,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialDesignModule,
+    MomentModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

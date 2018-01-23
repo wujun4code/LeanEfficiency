@@ -4,7 +4,8 @@
   "dependencies": {
     "express": "^4.12.3",
     "leancloud-storage": "^3.4.0",
-    "leanengine": "^3.0.2"
+    "leanengine": "^3.0.2",
+    "rx-lean-js-core": "^0.5.8"
   },
   "engines": {
     "node": "6.x"

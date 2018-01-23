@@ -15,7 +15,7 @@ export class SignupComponent implements OnInit {
   tooltipPosition = 'right';
   userBasicFormGroup: FormGroup;
   securityFormGroup: FormGroup;
-  teamId = '5a0c194b128fe10045282975';
+  teamId = '5a1048d7ee920a004451a557';
   team: TeamModel;
   user: UserModel;
   constructor(private _formBuilder: FormBuilder,
